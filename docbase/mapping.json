@@ -7,9 +7,8 @@
     "created_at": "2018-09-14T01:18:29+09:00",
     "scope": "everyone",
     "groups": [],
-    "content": "this is my first post.\n\n## postscript\n\nupdated\n\n## postscript2\n\nupdate by web ui\n",
     "name": 528390,
-    "file": "docs/hello.md"
+    "file": "docs/528390.md"
   },
   {
     "id": 529433,
@@ -19,7 +18,6 @@
     "created_at": "2018-09-15T20:31:22+09:00",
     "scope": "everyone",
     "groups": [],
-    "content": "yay\n\npng\n\n![png](https://image.docbase.io/uploads/5d1f9791-931b-4b18-abaf-d528e4e4c498.png)\n\n\nsvg\n\n![svg](https://image.docbase.io/uploads/0b8b788b-cf29-48f8-b198-6cc113ba8c23.svg)\n",
     "name": 529433,
     "file": "docs/529433.md"
   },
@@ -31,19 +29,8 @@
     "created_at": "2018-09-15T22:31:22+09:00",
     "scope": "everyone",
     "groups": [],
-    "content": "### Markdown cells\n\nThis is an example notebook that can be converted with `nbconvert` to different formats. This is an example of a markdown cell.\n\n### LaTeX Equations\n\nHere is an equation:\n\n$$\ny = \\sin(x)\n$$\n\n### Code cells\n\n\n```python\nprint(\"This is a code cell that produces some output\")\n```\n\n    This is a code cell that produces some output\n\n\n### Inline figures\n\n\n```python\nimport matplotlib.pyplot as plt\nimport numpy as np\nplt.ion()\n\nx = np.linspace(0, 2 * np.pi, 100)\ny = np.sin(x)\nplt.plot(x, y)\n```\n\n\n\n\n    [<matplotlib.lines.Line2D at 0x1111b2160>]\n\n\n\n\n![png](https://image.docbase.io/uploads/2127710a-2d92-4736-bd3a-23474e32cf24.png)\n",
     "name": 529447,
     "file": "docs/529447.md"
-  },
-  {
-    "id": 529448,
-    "title": "Timeseries Classification: KNN & DTW",
-    "draft": false,
-    "url": "https://po.docbase.io/posts/529448",
-    "created_at": "2018-09-15T22:35:35+09:00",
-    "scope": "everyone",
-    "groups": [],
-    "file": "K_Nearest_Neighbor_Dynamic_Time_Warping.md"
   },
   {
     "id": 529305,
@@ -53,7 +40,6 @@
     "created_at": "2018-09-14T22:50:34+09:00",
     "scope": "private",
     "groups": [],
-    "content": "![print2.png](https://image.docbase.io/uploads/30c12f2e-66f8-448b-8c84-ad9ad7fcbb7b.png =WxH)\n",
     "name": 529305,
     "file": "docs/529305.md"
   },
@@ -65,8 +51,40 @@
     "created_at": "2018-09-13T23:34:40+09:00",
     "scope": "everyone",
     "groups": [],
-    "content": "hello\n\n## hello\n\nfoo\n",
     "name": 528359,
     "file": "docs/528359.md"
+  },
+  {
+    "id": 529783,
+    "title": "hello",
+    "draft": false,
+    "url": "https://po.docbase.io/posts/529783",
+    "created_at": "2018-09-17T19:46:53+09:00",
+    "scope": "everyone",
+    "groups": [],
+    "name": 529783,
+    "file": "docs/hello.md"
+  },
+  {
+    "id": 529784,
+    "title": "sample (with images)",
+    "draft": false,
+    "url": "https://po.docbase.io/posts/529784",
+    "created_at": "2018-09-17T19:48:21+09:00",
+    "scope": "everyone",
+    "groups": [],
+    "name": 529784,
+    "file": "image.md"
+  },
+  {
+    "id": 529787,
+    "title": "Timeseries Classification: KNN & DTW",
+    "draft": false,
+    "url": "https://po.docbase.io/posts/529787",
+    "created_at": "2018-09-17T19:55:34+09:00",
+    "scope": "everyone",
+    "groups": [],
+    "name": 529787,
+    "file": "K_Nearest_Neighbor_Dynamic_Time_Warping.md"
   }
 ]

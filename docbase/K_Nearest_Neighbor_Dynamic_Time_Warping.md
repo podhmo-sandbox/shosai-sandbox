@@ -19,7 +19,7 @@ Image('images/dtw_knn_schematic.png', width=780)
 
 
 
-![png](https://image.docbase.io/uploads/43a6be18-b934-45f2-87b9-79190be0e0e7.png)
+![png](https://image.docbase.io/uploads/3c601d6b-3980-42bd-a5ac-cce6a1a83589.png)
 
 
 
@@ -44,7 +44,7 @@ Image('images/max_window_warping.png')
 
 
 
-![png](https://image.docbase.io/uploads/4cb26445-c959-42f8-8b0c-06f66bc55098.png)
+![png](https://image.docbase.io/uploads/299f246b-c232-4f24-a85a-dba3b26b2c04.png)
 
 
 
@@ -305,7 +305,7 @@ _ = plt.legend()
 ```
 
 
-![png](https://image.docbase.io/uploads/4fb4fca9-992d-4e89-9acf-2ab9b8fa33cf.png)
+![png](https://image.docbase.io/uploads/cc34a637-2f5b-4426-a8a9-c2af03cc81ac.png)
 
 
 It is also possible to compute the distance between each pair of two collections of inputs by using the `_dist_matrix()` method. These are the two methods which underpin the KnnDtw() classification algorithm. In the next section we will use the `fit()` and `predict()` method to train our classifier and predict class labels forunseen data.
@@ -341,7 +341,7 @@ Image('images/stand-sit-run.jpg')
 
 
 
-![jpeg](https://image.docbase.io/uploads/6ff81c61-9d07-4307-bd9e-f3d2560bb779.jpeg)
+![jpeg](https://image.docbase.io/uploads/1d48af18-90d7-4474-85e6-17d49d66bf45.jpeg)
 
 
 
@@ -407,7 +407,7 @@ for i, r in enumerate([0,27,65,100,145,172]):
 ```
 
 
-![png](https://image.docbase.io/uploads/2cb8db53-e41f-4ed2-aa58-b1a730e02bac.png)
+![png](https://image.docbase.io/uploads/c6afcda7-2b94-438e-8211-d750f0a168cf.png)
 
 
 #### Model Performance
@@ -461,7 +461,7 @@ _ = plt.yticks(range(6), [l for l in labels.values()])
 
 
 
-![png](https://image.docbase.io/uploads/12fe3e3c-912d-48cf-8b38-bd2a9f5964ba.png)
+![png](https://image.docbase.io/uploads/1f821373-1e7f-40e7-96c8-a6ece041954c.png)
 
 
 The KNN & DTW classifier performed very well across each of the 6 classes. It even beats the best classification rate published by the authors of the HAR paper.
@@ -499,7 +499,7 @@ plt.xscale('log')
 
 
 
-![png](https://image.docbase.io/uploads/bc682baf-17c5-4fdd-b8a5-35c6d10c9fc8.png)
+![png](https://image.docbase.io/uploads/b854af7f-22a3-42c4-966b-029705d6eeb6.png)
 
 
 ---
