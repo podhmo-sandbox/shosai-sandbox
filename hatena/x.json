@@ -1,0 +1,501 @@
+{
+  "feed": {
+    "@xmlns": "http://www.w3.org/2005/Atom",
+    "@xmlns:app": "http://www.w3.org/2007/app",
+    "link": [
+      {
+        "@rel": "first",
+        "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry"
+      },
+      {
+        "@rel": "next",
+        "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry?page=1535587472"
+      },
+      {
+        "@rel": "alternate",
+        "@href": "https://pod.hatenablog.com/"
+      }
+    ],
+    "title": "podhmo's diary",
+    "updated": "2018-09-09T17:53:58+09:00",
+    "author": {
+      "name": "podhmo"
+    },
+    "generator": {
+      "@uri": "https://blog.hatena.ne.jp/",
+      "@version": "783b26d251e942d93ec607fa190ca31e",
+      "#text": "Hatena::Blog"
+    },
+    "id": "hatenablog://blog/13208692334729901491",
+    "entry": [
+      {
+        "id": "tag:blog.hatena.ne.jp,2013:blog-podhmo-13208692334729901491-10257846132625196777",
+        "link": [
+          {
+            "@rel": "edit",
+            "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry/10257846132625196777"
+          },
+          {
+            "@rel": "alternate",
+            "@type": "text/html",
+            "@href": "https://pod.hatenablog.com/entry/2018/09/09/175358"
+          }
+        ],
+        "author": {
+          "name": "podhmo"
+        },
+        "title": "Emacsで指定したregionを標準入力として渡した結果をinsertする機能",
+        "updated": "2018-09-09T17:54:56+09:00",
+        "published": "2018-09-09T17:53:58+09:00",
+        "app:edited": "2018-09-09T17:54:56+09:00",
+        "summary": {
+          "@type": "text",
+          "#text": "時折、Emacsで現在のバッファにある文字列を入力として何らかのコマンドに投げて、その結果を取得したいと言うことがある。 単に結果を見たい場合には、shell-command-on-region が M-| などにbindされているので便利なんだけれど。結果を直接現在のバッファに…"
+        },
+        "content": {
+          "@type": "text/x-markdown",
+          "#text": "時折、Emacsで現在のバッファにある文字列を入力として何らかのコマンドに投げて、その結果を取得したいと言うことがある。\n単に結果を見たい場合には、`shell-command-on-region` が `M-|` などにbindされているので便利なんだけれど。結果を直接現在のバッファに挿入して欲しいことがある。これも実は上手くprefixを指定して入力してあげればどうにかなるのだけれど(`C-u t M-|`とか)。精神的に辛かったので以下の様なコマンドを作った。\n\n\n```lisp\n(defun my:shell-command-on-region-and-insert (start end command)\n  (interactive (let (string)\n                 (unless (mark)\n\t\t           (user-error \"The mark is not set now, so there is no region\"))\n\t\t         (setq string (read-shell-command \"Shell command on region(and insert): \"))\n\t\t         (list (region-beginning) (region-end) string))\n               )\n  (let ((output-buffer t)\n        (replace t))\n    (shell-command-on-region start end command output-buffer replace)))\n```\n\n今の所、`M-^` にbindしている。\n\n## 使いかた\n\nJSONの整形\n\n```json\n{\"name\": \"foo\", \"age\": 20}\n```\n\nこれが `M-^ jq .` で\n\n```json\n{\n  \"name\": \"foo\",\n  \"age\": 20\n}\n```\n\nこう。\n\n## 使いかた2\n\nJSONのquoteがだるいときに昨日作ったmkdictを使って\n\n```\nname foo age 20\n```\n\nこれが `M-^ dictknife mkdict` で\n\n```json\n{\n  \"name\": \"foo\",\n  \"age\": 20\n}\n```\n\nこう。\n\n## 使いかた3\n\nちょっとmarkdownの表が欲しくなったときにCSVなどから\n\n```csv\nname,score\nmath,20\nenglish,50\njapanese,60\n```\n\nこれが `M-^ dictknife cat -i csv -o md` で\n\n| name | score |\n| :--- | ---: |\n| math | 20 |\n| english | 50 |\n| japanese | 60 |\n\nこう。\n\n## 使いかた4\n\n(pythonとかその他何らかの言語)をformatterにかけたい時に\n\n```python\ndef f(x,y ):\n    print( \"hello\")\n```\n\nこれが `M-^ yapf` で\n\n```python\ndef f(x, y):\n    print(\"hello\")\n```\n\nこう。\n\n## おわりに\n\nたぶん他のエディタでもできるはず。\n\n本当はこの辺をRPC的に上手く取り扱う何かが欲しいという気持ちがある(言語のLSP(Language Server Protocol)も内包できるような何か)。"
+        },
+        "hatena:formatted-content": {
+          "@type": "text/html",
+          "@xmlns:hatena": "http://www.hatena.ne.jp/info/xmlns#",
+          "#text": "<p>時折、<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/Emacs\">Emacs</a>で現在のバッファにある文字列を入力として何らかのコマンドに投げて、その結果を取得したいと言うことがある。\n単に結果を見たい場合には、<code>shell-command-on-region</code> が <code>M-|</code> などにbindされているので便利なんだけれど。結果を直接現在のバッファに挿入して欲しいことがある。これも実は上手くprefixを指定して入力してあげればどうにかなるのだけれど(<code>C-u t M-|</code>とか)。精神的に辛かったので以下の様なコマンドを作った。</p>\n\n<pre class=\"code lang-lisp\" data-lang=\"lisp\" data-unlink><span class=\"synSpecial\">(</span><span class=\"synStatement\">defun</span> my:shell-command-on-region-and-insert <span class=\"synSpecial\">(</span>start end command<span class=\"synSpecial\">)</span>\n  <span class=\"synSpecial\">(</span>interactive <span class=\"synSpecial\">(</span><span class=\"synStatement\">let</span> <span class=\"synSpecial\">(</span><span class=\"synStatement\">string</span><span class=\"synSpecial\">)</span>\n                 <span class=\"synSpecial\">(</span><span class=\"synStatement\">unless</span> <span class=\"synSpecial\">(</span>mark<span class=\"synSpecial\">)</span>\n                   <span class=\"synSpecial\">(</span>user-error <span class=\"synConstant\">&quot;The mark is not set now, so there is no region&quot;</span><span class=\"synSpecial\">))</span>\n                 <span class=\"synSpecial\">(</span><span class=\"synStatement\">setq</span> <span class=\"synStatement\">string</span> <span class=\"synSpecial\">(</span>read-shell-command <span class=\"synConstant\">&quot;Shell command on region(and insert): &quot;</span><span class=\"synSpecial\">))</span>\n                 <span class=\"synSpecial\">(</span><span class=\"synStatement\">list</span> <span class=\"synSpecial\">(</span>region-beginning<span class=\"synSpecial\">)</span> <span class=\"synSpecial\">(</span>region-end<span class=\"synSpecial\">)</span> <span class=\"synStatement\">string</span><span class=\"synSpecial\">))</span>\n               <span class=\"synSpecial\">)</span>\n  <span class=\"synSpecial\">(</span><span class=\"synStatement\">let</span> <span class=\"synSpecial\">((</span>output-buffer <span class=\"synStatement\">t</span><span class=\"synSpecial\">)</span>\n        <span class=\"synSpecial\">(</span><span class=\"synStatement\">replace</span> <span class=\"synStatement\">t</span><span class=\"synSpecial\">))</span>\n    <span class=\"synSpecial\">(</span>shell-command-on-region start end command output-buffer <span class=\"synStatement\">replace</span><span class=\"synSpecial\">)))</span>\n</pre>\n\n\n<p>今の所、<code>M-^</code> にbindしている。</p>\n\n<h2>使いかた</h2>\n\n<p><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/JSON\">JSON</a>の整形</p>\n\n<pre class=\"code lang-json\" data-lang=\"json\" data-unlink><span class=\"synSpecial\">{</span>&quot;<span class=\"synStatement\">name</span>&quot;: &quot;<span class=\"synConstant\">foo</span>&quot;, &quot;<span class=\"synStatement\">age</span>&quot;: <span class=\"synConstant\">20</span><span class=\"synSpecial\">}</span>\n</pre>\n\n\n<p>これが <code>M-^ jq .</code> で</p>\n\n<pre class=\"code lang-json\" data-lang=\"json\" data-unlink><span class=\"synSpecial\">{</span>\n  &quot;<span class=\"synStatement\">name</span>&quot;: &quot;<span class=\"synConstant\">foo</span>&quot;,\n  &quot;<span class=\"synStatement\">age</span>&quot;: <span class=\"synConstant\">20</span>\n<span class=\"synSpecial\">}</span>\n</pre>\n\n\n<p>こう。</p>\n\n<h2>使いかた2</h2>\n\n<p><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/JSON\">JSON</a>のquoteがだるいときに昨日作ったmkdictを使って</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>name foo age 20</pre>\n\n\n<p>これが <code>M-^ dictknife mkdict</code> で</p>\n\n<pre class=\"code lang-json\" data-lang=\"json\" data-unlink><span class=\"synSpecial\">{</span>\n  &quot;<span class=\"synStatement\">name</span>&quot;: &quot;<span class=\"synConstant\">foo</span>&quot;,\n  &quot;<span class=\"synStatement\">age</span>&quot;: <span class=\"synConstant\">20</span>\n<span class=\"synSpecial\">}</span>\n</pre>\n\n\n<p>こう。</p>\n\n<h2>使いかた3</h2>\n\n<p>ちょっと<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/markdown\">markdown</a>の表が欲しくなったときに<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/CSV\">CSV</a>などから</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>name,score\nmath,20\nenglish,50\njapanese,60</pre>\n\n\n<p>これが <code>M-^ dictknife cat -i csv -o md</code> で</p>\n\n<table>\n<thead>\n<tr>\n<th style=\"text-align:left;\"> name </th>\n<th style=\"text-align:right;\"> score </th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"text-align:left;\"> math </td>\n<td style=\"text-align:right;\"> 20 </td>\n</tr>\n<tr>\n<td style=\"text-align:left;\"> english </td>\n<td style=\"text-align:right;\"> 50 </td>\n</tr>\n<tr>\n<td style=\"text-align:left;\"> japanese </td>\n<td style=\"text-align:right;\"> 60 </td>\n</tr>\n</tbody>\n</table>\n\n\n<p>こう。</p>\n\n<h2>使いかた4</h2>\n\n<p>(<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>とかその他何らかの言語)をformatterにかけたい時に</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink><span class=\"synStatement\">def</span> <span class=\"synIdentifier\">f</span>(x,y ):\n    <span class=\"synIdentifier\">print</span>( <span class=\"synConstant\">&quot;hello&quot;</span>)\n</pre>\n\n\n<p>これが <code>M-^ yapf</code> で</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink><span class=\"synStatement\">def</span> <span class=\"synIdentifier\">f</span>(x, y):\n    <span class=\"synIdentifier\">print</span>(<span class=\"synConstant\">&quot;hello&quot;</span>)\n</pre>\n\n\n<p>こう。</p>\n\n<h2>おわりに</h2>\n\n<p>たぶん他のエディタでもできるはず。</p>\n\n<p>本当はこの辺をRPC的に上手く取り扱う何かが欲しいという気持ちがある(言語のLSP(Language Server Protocol)も内包できるような何か)。</p>"
+        },
+        "category": [
+          {
+            "@term": "emacs"
+          },
+          {
+            "@term": "shell"
+          },
+          {
+            "@term": "memo"
+          }
+        ],
+        "app:control": {
+          "app:draft": "no"
+        }
+      },
+      {
+        "id": "tag:blog.hatena.ne.jp,2013:blog-podhmo-13208692334729901491-10257846132625017003",
+        "link": [
+          {
+            "@rel": "edit",
+            "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry/10257846132625017003"
+          },
+          {
+            "@rel": "alternate",
+            "@type": "text/html",
+            "@href": "https://pod.hatenablog.com/entry/2018/09/09/140905"
+          }
+        ],
+        "author": {
+          "name": "podhmo"
+        },
+        "title": "dictknifeのmkdictでJSONを生成する時に不格好だけれど任意の配列も許すようにした",
+        "updated": "2018-09-09T14:12:22+09:00",
+        "published": "2018-09-09T14:09:05+09:00",
+        "app:edited": "2018-09-09T14:12:22+09:00",
+        "summary": {
+          "@type": "text",
+          "#text": "github.com 昨日のこの記事の続き。 JSONをコマンドラインから作るのが面倒だったのでそれ用のコマンドを作った - podhmo's diary 不格好だけれど、配列(pythonではlist)をサポートした。 name description xs/0/ xs[0] …"
+        },
+        "content": {
+          "@type": "text/x-markdown",
+          "#text": "[https://github.com/podhmo/dictknife:cite:embed]\n\n昨日のこの記事の続き。\n\n- [JSONをコマンドラインから作るのが面倒だったのでそれ用のコマンドを作った - podhmo's diary](https://pod.hatenablog.com/entry/2018/09/09/034346 \"JSONをコマンドラインから作るのが面倒だったのでそれ用のコマンドを作った - podhmo's diary\")\n\n不格好だけれど、配列(pythonではlist)をサポートした。\n\n| name | description |\n| :--- | :--- |\n| `xs/0/` | `xs[0]` の意味 |\n| `xs/-1/` | `xs[-1]` の意味 |\n| `xs//` | `xs.append` の意味 |\n\n## 例\n\n最終的な値が配列の場合\n\n\n```console\n$ dictknife mkdict xs/ a xs/ b xs/ c\n{\n  \"xs\": [\n    \"a\",\n    \"b\",\n    \"c\"\n  ]\n}\n```\n\n\n最終的な値がオブジェクトの配列の場合\n\n```console\n$ dictknife mkdict xs//name a xs//name b xs//name c\n{\n  \"xs\": [\n    {\n      \"name\": \"a\"\n    },\n    {\n      \"name\": \"b\"\n    },\n    {\n      \"name\": \"c\"\n    }\n  ]\n}\n```\n\nオブジェクトが複数のフィールドを持った場合\n\n```console\n$ dictknife mkdict xs//name a xs/-1/age 20 xs//name b xs/-1/age 10\n{\n  \"xs\": [\n    {\n      \"name\": \"a\",\n      \"age\": 20\n    },\n    {\n      \"name\": \"b\",\n      \"age\": 10\n    }\n  ]\n}\n```\n\nまじめに全部indexを指定しても良い。\n\n```console\n$ dictknife mkdict xs/0/name a xs/0/age 20 xs/1/name b xs/1/age 10\n{\n  \"xs\": [\n    {\n      \"name\": \"a\",\n      \"age\": 20\n    },\n    {\n      \"name\": \"b\",\n      \"age\": 10\n    }\n  ]\n}\n```\n\n添字で位置を指定して生成も可能\n\n```console\n$ dictknife mkdict xs/1/name a xs/1/age 20 xs/0/name b xs/0/age 10\n{\n  \"xs\": [\n    {\n      \"name\": \"b\",\n      \"age\": 10\n    },\n    {\n      \"name\": \"a\",\n      \"age\": 20\n    }\n  ]\n}\n```\n\n余ったものは空オブジェクト\n\n```console\n$ dictknife mkdict xs/5/name a xs/5/age 20\n{\n  \"xs\": [\n    {},\n    {},\n    {},\n    {},\n    {},\n    {\n      \"name\": \"a\",\n      \"age\": 20\n    }\n  ]\n}\n```\n\n変数と一緒に使う\n\n```console\n$ dictknife mkdict @xs/0/name a @xs/0/age 20 @xs/1/name b @xs/1/age 10 names/ \"&xs/0/name\" names/ \"&xs/1/name\"\n{\n  \"names\": [\n    \"a\",\n    \"b\"\n  ]\n}\n```"
+        },
+        "hatena:formatted-content": {
+          "@type": "text/html",
+          "@xmlns:hatena": "http://www.hatena.ne.jp/info/xmlns#",
+          "#text": "<p><cite class=\"hatena-citation\"><a href=\"https://github.com/podhmo/dictknife\">github.com</a></cite><iframe src=\"https://hatenablog-parts.com/embed?url=https%3A%2F%2Fgithub.com%2Fpodhmo%2Fdictknife\" title=\"podhmo/dictknife\" class=\"embed-card embed-webcard\" scrolling=\"no\" frameborder=\"0\" style=\"display: block; width: 100%; height: 155px; max-width: 500px; margin: 10px 0px;\"></iframe></p>\n\n<p>昨日のこの記事の続き。</p>\n\n<ul>\n<li><a href=\"https://pod.hatenablog.com/entry/2018/09/09/034346\" title=\"JSONをコマンドラインから作るのが面倒だったのでそれ用のコマンドを作った - podhmo's diary\">JSONをコマンドラインから作るのが面倒だったのでそれ用のコマンドを作った - podhmo's diary</a></li>\n</ul>\n\n\n<p>不格好だけれど、配列(<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>ではlist)をサポートした。</p>\n\n<table>\n<thead>\n<tr>\n<th style=\"text-align:left;\"> name </th>\n<th style=\"text-align:left;\"> description </th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"text-align:left;\"> <code>xs/0/</code> </td>\n<td style=\"text-align:left;\"> <code>xs[0]</code> の意味 </td>\n</tr>\n<tr>\n<td style=\"text-align:left;\"> <code>xs/-1/</code> </td>\n<td style=\"text-align:left;\"> <code>xs[-1]</code> の意味 </td>\n</tr>\n<tr>\n<td style=\"text-align:left;\"> <code>xs//</code> </td>\n<td style=\"text-align:left;\"> <code>xs.append</code> の意味 </td>\n</tr>\n</tbody>\n</table>\n\n\n<h2>例</h2>\n\n<p>最終的な値が配列の場合</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict xs/ a xs/ b xs/ c\n{\n  &#34;xs&#34;: [\n    &#34;a&#34;,\n    &#34;b&#34;,\n    &#34;c&#34;\n  ]\n}</pre>\n\n\n<p>最終的な値がオブジェクトの配列の場合</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict xs//name a xs//name b xs//name c\n{\n  &#34;xs&#34;: [\n    {\n      &#34;name&#34;: &#34;a&#34;\n    },\n    {\n      &#34;name&#34;: &#34;b&#34;\n    },\n    {\n      &#34;name&#34;: &#34;c&#34;\n    }\n  ]\n}</pre>\n\n\n<p>オブジェクトが複数のフィールドを持った場合</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict xs//name a xs/-1/age 20 xs//name b xs/-1/age 10\n{\n  &#34;xs&#34;: [\n    {\n      &#34;name&#34;: &#34;a&#34;,\n      &#34;age&#34;: 20\n    },\n    {\n      &#34;name&#34;: &#34;b&#34;,\n      &#34;age&#34;: 10\n    }\n  ]\n}</pre>\n\n\n<p>まじめに全部indexを指定しても良い。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict xs/0/name a xs/0/age 20 xs/1/name b xs/1/age 10\n{\n  &#34;xs&#34;: [\n    {\n      &#34;name&#34;: &#34;a&#34;,\n      &#34;age&#34;: 20\n    },\n    {\n      &#34;name&#34;: &#34;b&#34;,\n      &#34;age&#34;: 10\n    }\n  ]\n}</pre>\n\n\n<p>添字で位置を指定して生成も可能</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict xs/1/name a xs/1/age 20 xs/0/name b xs/0/age 10\n{\n  &#34;xs&#34;: [\n    {\n      &#34;name&#34;: &#34;b&#34;,\n      &#34;age&#34;: 10\n    },\n    {\n      &#34;name&#34;: &#34;a&#34;,\n      &#34;age&#34;: 20\n    }\n  ]\n}</pre>\n\n\n<p>余ったものは空オブジェクト</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict xs/5/name a xs/5/age 20\n{\n  &#34;xs&#34;: [\n    {},\n    {},\n    {},\n    {},\n    {},\n    {\n      &#34;name&#34;: &#34;a&#34;,\n      &#34;age&#34;: 20\n    }\n  ]\n}</pre>\n\n\n<p>変数と一緒に使う</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict @xs/0/name a @xs/0/age 20 @xs/1/name b @xs/1/age 10 names/ &#34;&amp;xs/0/name&#34; names/ &#34;&amp;xs/1/name&#34;\n{\n  &#34;names&#34;: [\n    &#34;a&#34;,\n    &#34;b&#34;\n  ]\n}</pre>"
+        },
+        "category": [
+          {
+            "@term": "dictknife"
+          },
+          {
+            "@term": "python"
+          }
+        ],
+        "app:control": {
+          "app:draft": "no"
+        }
+      },
+      {
+        "id": "tag:blog.hatena.ne.jp,2013:blog-podhmo-13208692334729901491-10257846132624906337",
+        "link": [
+          {
+            "@rel": "edit",
+            "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry/10257846132624906337"
+          },
+          {
+            "@rel": "alternate",
+            "@type": "text/html",
+            "@href": "https://pod.hatenablog.com/entry/2018/09/09/115807"
+          }
+        ],
+        "author": {
+          "name": "podhmo"
+        },
+        "title": "dictknifeのmkdictに変数を追加した",
+        "updated": "2018-09-09T11:58:07+09:00",
+        "published": "2018-09-09T11:58:07+09:00",
+        "app:edited": "2018-09-09T11:58:07+09:00",
+        "summary": {
+          "@type": "text",
+          "#text": "github.com 昨日のこの記事の続き。 JSONをコマンドラインから作るのが面倒だったのでそれ用のコマンドを作った - podhmo's diary 簡単な変数を使える機能を追加した。概ね以下のような感じ。 name description @ 変数に値を代入 & 変数の値…"
+        },
+        "content": {
+          "@type": "text/x-markdown",
+          "#text": "[https://github.com/podhmo/dictknife:cite:embed]\n\n昨日のこの記事の続き。\n\n- [JSONをコマンドラインから作るのが面倒だったのでそれ用のコマンドを作った - podhmo's diary](https://pod.hatenablog.com/entry/2018/09/09/034346 \"JSONをコマンドラインから作るのが面倒だったのでそれ用のコマンドを作った - podhmo's diary\")\n\n簡単な変数を使える機能を追加した。概ね以下のような感じ。\n\n| name | description |\n| :--- | :--- |\n| @<name> | 変数<name>に値を代入 |\n| &<name> | 変数<name>の値を参照 |\n\n## 例\n\nobという変数に代入して２つの箇所で使っている。\n\n```console\n$ dictknife mkdict @ob/name foo @ob/age 40 name bar age 20 parent \"&ob\" \";\" name boo age 18 parent \"&ob\"\n[\n  {\n    \"name\": \"bar\",\n    \"age\": 20,\n    \"parent\": {\n      \"name\": \"foo\",\n      \"age\": 40\n    }\n  },\n  {\n    \"name\": \"boo\",\n    \"age\": 18,\n    \"parent\": {\n      \"name\": \"foo\",\n      \"age\": 40\n    }\n  }\n]\n```\n\n## escape\n\nそれぞれ@@と&&でescapeできる。\n\n```console\n$ dictknife mkdict @x val use \"&x\" dont-ref \"&&x\" @@dont-assign \"v\"\n{\n  \"use\": \"val\",\n  \"dont-ref\": \"&x\",\n  \"@dont-assign\": \"v\"\n}\n```"
+        },
+        "hatena:formatted-content": {
+          "@type": "text/html",
+          "@xmlns:hatena": "http://www.hatena.ne.jp/info/xmlns#",
+          "#text": "<p><cite class=\"hatena-citation\"><a href=\"https://github.com/podhmo/dictknife\">github.com</a></cite><iframe src=\"https://hatenablog-parts.com/embed?url=https%3A%2F%2Fgithub.com%2Fpodhmo%2Fdictknife\" title=\"podhmo/dictknife\" class=\"embed-card embed-webcard\" scrolling=\"no\" frameborder=\"0\" style=\"display: block; width: 100%; height: 155px; max-width: 500px; margin: 10px 0px;\"></iframe></p>\n\n<p>昨日のこの記事の続き。</p>\n\n<ul>\n<li><a href=\"https://pod.hatenablog.com/entry/2018/09/09/034346\" title=\"JSONをコマンドラインから作るのが面倒だったのでそれ用のコマンドを作った - podhmo's diary\">JSONをコマンドラインから作るのが面倒だったのでそれ用のコマンドを作った - podhmo's diary</a></li>\n</ul>\n\n\n<p>簡単な変数を使える機能を追加した。概ね以下のような感じ。</p>\n\n<table>\n<thead>\n<tr>\n<th style=\"text-align:left;\"> name </th>\n<th style=\"text-align:left;\"> description </th>\n</tr>\n</thead>\n<tbody>\n<tr>\n<td style=\"text-align:left;\"> @<name> </td>\n<td style=\"text-align:left;\"> 変数<name>に値を代入 </td>\n</tr>\n<tr>\n<td style=\"text-align:left;\"> &amp;<name> </td>\n<td style=\"text-align:left;\"> 変数<name>の値を参照 </td>\n</tr>\n</tbody>\n</table>\n\n\n<h2>例</h2>\n\n<p>obという変数に代入して２つの箇所で使っている。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict @ob/name foo @ob/age 40 name bar age 20 parent &#34;&amp;ob&#34; &#34;;&#34; name boo age 18 parent &#34;&amp;ob&#34;\n[\n  {\n    &#34;name&#34;: &#34;bar&#34;,\n    &#34;age&#34;: 20,\n    &#34;parent&#34;: {\n      &#34;name&#34;: &#34;foo&#34;,\n      &#34;age&#34;: 40\n    }\n  },\n  {\n    &#34;name&#34;: &#34;boo&#34;,\n    &#34;age&#34;: 18,\n    &#34;parent&#34;: {\n      &#34;name&#34;: &#34;foo&#34;,\n      &#34;age&#34;: 40\n    }\n  }\n]</pre>\n\n\n<h2>escape</h2>\n\n<p>それぞれ@@と&amp;&amp;でescapeできる。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict @x val use &#34;&amp;x&#34; dont-ref &#34;&amp;&amp;x&#34; @@dont-assign &#34;v&#34;\n{\n  &#34;use&#34;: &#34;val&#34;,\n  &#34;dont-ref&#34;: &#34;&amp;x&#34;,\n  &#34;@dont-assign&#34;: &#34;v&#34;\n}</pre>"
+        },
+        "category": [
+          {
+            "@term": "dictknife"
+          },
+          {
+            "@term": "python"
+          }
+        ],
+        "app:control": {
+          "app:draft": "no"
+        }
+      },
+      {
+        "id": "tag:blog.hatena.ne.jp,2013:blog-podhmo-13208692334729901491-10257846132624564633",
+        "link": [
+          {
+            "@rel": "edit",
+            "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry/10257846132624564633"
+          },
+          {
+            "@rel": "alternate",
+            "@type": "text/html",
+            "@href": "https://pod.hatenablog.com/entry/2018/09/09/034346"
+          }
+        ],
+        "author": {
+          "name": "podhmo"
+        },
+        "title": "JSONをコマンドラインから作るのが面倒だったのでそれ用のコマンドを作った",
+        "updated": "2018-09-09T04:53:14+09:00",
+        "published": "2018-09-09T03:43:46+09:00",
+        "app:edited": "2018-09-09T04:53:14+09:00",
+        "summary": {
+          "@type": "text",
+          "#text": "github.com mkdictという名前（あとで名前は変えるかもしれない）。 使いかた すごくシンプルな文法。内部的にはshlexパッケージを使っている。標準ライブラリだけである程度手軽にシェルっぽい文法に対応できるのは便利(punctuation_charsオプションに対応…"
+        },
+        "content": {
+          "@type": "text/x-markdown",
+          "#text": "[https://github.com/podhmo/dictknife:cite:embed]\n\nmkdictという名前（あとで名前は変えるかもしれない）。\n\n## 使いかた\n\nすごくシンプルな文法。内部的には[shlex](https://docs.python.jp/3/library/shlex.html)パッケージを使っている。標準ライブラリだけである程度手軽にシェルっぽい文法に対応できるのは便利(punctuation_charsオプションに対応しているのが3.6空だったことにショックを受けたりしてた)。\n\n```console\n$ dictknife mkdict --name foo --age 20\n{\n  \"name\": \"foo\",\n  \"age\": 20\n}\n```\n\n実はオプション引数の形式である必要はなく。以下でも同じ意味。\n\n```console\n$ dictknife mkdict name foo age 20\n{\n  \"name\": \"foo\",\n  \"age\": 20\n}\n```\n\nこうでも大丈夫。\n\n```console\n$ dictknife mkdict --name=foo --age=20\n{\n  \"name\": \"foo\",\n  \"age\": 20\n}\n```\n\n### quote\n\nquoteはちょっと不親切。\n\n```console\n$ dictknife mkdict --message='\"foo --age 20\"'\n{\n  \"message\": \"foo --age 20\"\n}\n\n# これでも大丈夫にしたいのだけれど。。\n$ dictknife mkdict --message='foo --age 20'\n{\n  \"message\": \"foo\",\n  \"age\": 20\n}\n```\n\n#### 追記\n\n直した。\n\n```console\n$ dictknife mkdict --message='\"foo --age 20\"'\n{\n  \"message\": \"foo --age 20\"\n}\n\n# 大丈夫\n$ dictknife mkdict --message='foo --age 20'\n{\n  \"message\": \"foo --age 20\"\n}\n```\n\n### 重複した場合\n\n重複した場合には後のものが優先される。\n\n```console\n$ dictknife mkdict --name foo --age 20 --name bar\n{\n  \"name\": \"bar\",\n  \"age\": 20\n}\n```\n\n### ネストした値\n\nネストした構造を作りたい場合には\"/\"で区切る。\n\n```console\n$ dictknife mkdict name foo age 20 father/name X mother/name Y\n{\n  \"name\": \"foo\",\n  \"age\": 20,\n  \"father\": {\n    \"name\": \"X\"\n  },\n  \"mother\": {\n    \"name\": \"Y\"\n  }\n}\n```\n\n区切り文字を変えたい場合には`--separator`で指定する。\n\n```console\ndictknife mkdict --separator=. name foo age 20 father.name X mother.name Y\n{\n  \"name\": \"foo\",\n  \"age\": 20,\n  \"father\": {\n    \"name\": \"X\"\n  },\n  \"mother\": {\n    \"name\": \"Y\"\n  }\n}\n```\n\n### 複数の値を表示したい場合\n\n\";\"で区切る。\n\n```console\n$ dictknife mkdict --name foo --age 20 \";\" --name bar\n[\n  {\n    \"name\": \"foo\",\n    \"age\": 20\n  },\n  {\n    \"name\": \"bar\"\n  }\n]\n```\n\n`--squash` をつけるとリストではなく分割された値になる。\n\n```console\n$ dictknife mkdict --squash --name foo --age 20 \";\" --name bar\n{\n  \"name\": \"foo\",\n  \"age\": 20\n}\n{\n  \"name\": \"bar\"\n}\n```\n\n\n### 追記\n\n標準入力から取れるようにもした\n\ninput.txt\n\n```\nname foo age 20\nname bar age 21\nname \"foo bar boo\" age 20 x/nickname x\n```\n\nここで\n\n```console\n$ cat input.txt | dictknife mkdict\n[\n  {\n    \"name\": \"foo\",\n    \"age\": 20\n  },\n  {\n    \"name\": \"bar\",\n    \"age\": 21\n  },\n  {\n    \"name\": \"foo bar boo\",\n    \"age\": 20,\n    \"x\": {\n      \"nickname\": \"x\"\n    }\n  }\n]\n```\n\n(jqfpyを使って一行毎に)\n\n```console\n$ cat input.txt | dictknife mkdict | jqfpy --compact --squash\n{\"name\": \"foo\", \"age\": 20}\n{\"name\": \"bar\", \"age\": 21}\n{\"name\": \"foo bar boo\", \"age\": 20, \"x\": {\"nickname\": \"x\"}}\n```"
+        },
+        "hatena:formatted-content": {
+          "@type": "text/html",
+          "@xmlns:hatena": "http://www.hatena.ne.jp/info/xmlns#",
+          "#text": "<p><cite class=\"hatena-citation\"><a href=\"https://github.com/podhmo/dictknife\">github.com</a></cite><iframe src=\"https://hatenablog-parts.com/embed?url=https%3A%2F%2Fgithub.com%2Fpodhmo%2Fdictknife\" title=\"podhmo/dictknife\" class=\"embed-card embed-webcard\" scrolling=\"no\" frameborder=\"0\" style=\"display: block; width: 100%; height: 155px; max-width: 500px; margin: 10px 0px;\"></iframe></p>\n\n<p>mkdictという名前（あとで名前は変えるかもしれない）。</p>\n\n<h2>使いかた</h2>\n\n<p>すごくシンプルな文法。内部的には<a href=\"https://docs.python.jp/3/library/shlex.html\">shlex</a>パッケージを使っている。標準ライブラリだけである程度手軽にシェルっぽい文法に対応できるのは便利(punctuation_charsオプションに対応しているのが3.6空だったことにショックを受けたりしてた)。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict --name foo --age 20\n{\n  &#34;name&#34;: &#34;foo&#34;,\n  &#34;age&#34;: 20\n}</pre>\n\n\n<p>実はオプション引数の形式である必要はなく。以下でも同じ意味。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict name foo age 20\n{\n  &#34;name&#34;: &#34;foo&#34;,\n  &#34;age&#34;: 20\n}</pre>\n\n\n<p>こうでも大丈夫。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict --name=foo --age=20\n{\n  &#34;name&#34;: &#34;foo&#34;,\n  &#34;age&#34;: 20\n}</pre>\n\n\n<h3>quote</h3>\n\n<p>quoteはちょっと不親切。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict --message=&#39;&#34;foo --age 20&#34;&#39;\n{\n  &#34;message&#34;: &#34;foo --age 20&#34;\n}\n\n# これでも大丈夫にしたいのだけれど。。\n$ dictknife mkdict --message=&#39;foo --age 20&#39;\n{\n  &#34;message&#34;: &#34;foo&#34;,\n  &#34;age&#34;: 20\n}</pre>\n\n\n<h4><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%C4%C9%B5%AD\">追記</a></h4>\n\n<p>直した。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict --message=&#39;&#34;foo --age 20&#34;&#39;\n{\n  &#34;message&#34;: &#34;foo --age 20&#34;\n}\n\n# 大丈夫\n$ dictknife mkdict --message=&#39;foo --age 20&#39;\n{\n  &#34;message&#34;: &#34;foo --age 20&#34;\n}</pre>\n\n\n<h3>重複した場合</h3>\n\n<p>重複した場合には後のものが優先される。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict --name foo --age 20 --name bar\n{\n  &#34;name&#34;: &#34;bar&#34;,\n  &#34;age&#34;: 20\n}</pre>\n\n\n<h3>ネストした値</h3>\n\n<p>ネストした構造を作りたい場合には\"/\"で区切る。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict name foo age 20 father/name X mother/name Y\n{\n  &#34;name&#34;: &#34;foo&#34;,\n  &#34;age&#34;: 20,\n  &#34;father&#34;: {\n    &#34;name&#34;: &#34;X&#34;\n  },\n  &#34;mother&#34;: {\n    &#34;name&#34;: &#34;Y&#34;\n  }\n}</pre>\n\n\n<p>区切り文字を変えたい場合には<code>--separator</code>で指定する。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>dictknife mkdict --separator=. name foo age 20 father.name X mother.name Y\n{\n  &#34;name&#34;: &#34;foo&#34;,\n  &#34;age&#34;: 20,\n  &#34;father&#34;: {\n    &#34;name&#34;: &#34;X&#34;\n  },\n  &#34;mother&#34;: {\n    &#34;name&#34;: &#34;Y&#34;\n  }\n}</pre>\n\n\n<h3>複数の値を表示したい場合</h3>\n\n<p>\";\"で区切る。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict --name foo --age 20 &#34;;&#34; --name bar\n[\n  {\n    &#34;name&#34;: &#34;foo&#34;,\n    &#34;age&#34;: 20\n  },\n  {\n    &#34;name&#34;: &#34;bar&#34;\n  }\n]</pre>\n\n\n<p><code>--squash</code> をつけるとリストではなく分割された値になる。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dictknife mkdict --squash --name foo --age 20 &#34;;&#34; --name bar\n{\n  &#34;name&#34;: &#34;foo&#34;,\n  &#34;age&#34;: 20\n}\n{\n  &#34;name&#34;: &#34;bar&#34;\n}</pre>\n\n\n<h3><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%C4%C9%B5%AD\">追記</a></h3>\n\n<p>標準入力から取れるようにもした</p>\n\n<p>input.txt</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>name foo age 20\nname bar age 21\nname &#34;foo bar boo&#34; age 20 x/nickname x</pre>\n\n\n<p>ここで</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ cat input.txt | dictknife mkdict\n[\n  {\n    &#34;name&#34;: &#34;foo&#34;,\n    &#34;age&#34;: 20\n  },\n  {\n    &#34;name&#34;: &#34;bar&#34;,\n    &#34;age&#34;: 21\n  },\n  {\n    &#34;name&#34;: &#34;foo bar boo&#34;,\n    &#34;age&#34;: 20,\n    &#34;x&#34;: {\n      &#34;nickname&#34;: &#34;x&#34;\n    }\n  }\n]</pre>\n\n\n<p>(jqfpyを使って一行毎に)</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ cat input.txt | dictknife mkdict | jqfpy --compact --squash\n{&#34;name&#34;: &#34;foo&#34;, &#34;age&#34;: 20}\n{&#34;name&#34;: &#34;bar&#34;, &#34;age&#34;: 21}\n{&#34;name&#34;: &#34;foo bar boo&#34;, &#34;age&#34;: 20, &#34;x&#34;: {&#34;nickname&#34;: &#34;x&#34;}}</pre>"
+        },
+        "category": [
+          {
+            "@term": "dictknife"
+          },
+          {
+            "@term": "pythn"
+          }
+        ],
+        "app:control": {
+          "app:draft": "no"
+        }
+      },
+      {
+        "id": "tag:blog.hatena.ne.jp,2013:blog-podhmo-13208692334729901491-10257846132624347993",
+        "link": [
+          {
+            "@rel": "edit",
+            "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry/10257846132624347993"
+          },
+          {
+            "@rel": "alternate",
+            "@type": "text/html",
+            "@href": "https://pod.hatenablog.com/entry/2018/09/08/224611"
+          }
+        ],
+        "author": {
+          "name": "podhmo"
+        },
+        "title": "jqとls --colorの不思議とisatty",
+        "updated": "2018-09-08T22:46:11+09:00",
+        "published": "2018-09-08T22:46:11+09:00",
+        "app:edited": "2018-09-08T23:00:44+09:00",
+        "summary": {
+          "@type": "text",
+          "#text": "コマンド出力に色が着く ls --colorなどを実行すると文字に色が着く。こういうふうに。 これはjqも同じで普通にコマンドを実行すると色が着く。 pythonで これらはansi-color-code付きで出力されているので色が着く。pythonでやってみるとこういう感じ。 …"
+        },
+        "content": {
+          "@type": "text/x-markdown",
+          "#text": "## コマンド出力に色が着く\n\n`ls --color`などを実行すると文字に色が着く。こういうふうに。\n\n[f:id:podhmo:20180908224043p:plain]\n\nこれは`jq`も同じで普通にコマンドを実行すると色が着く。\n[f:id:podhmo:20180908224108p:plain]\n\n### pythonで\n\nこれらは[ansi-color-code](https://en.wikipedia.org/wiki/ANSI_escape_code)付きで出力されているので色が着く。pythonでやってみるとこういう感じ。\n\n```python\nprint(\"[01;34mhello[0m world\")\n```\n\n[f:id:podhmo:20180908224206p:plain]\n\n\n## リダイレクトしたりパイプでつなげると色がなくなる。\n\n`ls --color`はリダイレクトしたりパイプでつなげても色が残るのに対して、`jq`はリダイレクトすると色が消える。例えばjqの出力をcatに渡してみる。色が消える。\n\n[f:id:podhmo:20180908224232p:plain]\n\nこの振る舞いはどうやっているんだろう？というのが今回の話。\n\n## isatty\n\n正体はisattyでこれは渡されたファイルディスクリプタがターミナルから開かれているかどうか調べてくれるもの。実際jqなどのコードを覗いてみたら[使われている箇所](https://github.com/stedolan/jq/blob/341a5fcab34a19e155810e281e550f17d17b809f/src/main.c#L522-L529)があった。\n\nおもむろにmanを見てみるとそれっぽいことが書かれている。\n\n```\nNAME\n       isatty - test whether a file descriptor refers to a terminal\n\nSYNOPSIS\n       #include <unistd.h>\n\n       int isatty(int fd);\n\nDESCRIPTION\n       The isatty() function tests whether fd is an open file descriptor referring to a terminal.\n\nRETURN VALUE\n       isatty() returns 1 if fd is an open file descriptor referring to a terminal; otherwise 0 is returned, and errno is set to indicate the error.\n```\n\n## pythonでもisatty\n\npythonにもisattyは存在していて、[os.isatty()](https://docs.python.jp/3/library/os.html#os.isatty)を使っても良いけれど。\n> ファイル記述子 fd がオープンされていて、 tty (のような) デバイスに接続されている場合、 True を返します。そうでない場合は False を返します。\n\n標準出力などが`isatty()`メソッドを持っているのでこれを使えば良い。\n\n実際に使って確かめてみる。\n\n```console\n$ python -c 'import sys; print(sys.stdout.isatty())'\nTrue\n$ python -c 'import sys; print(sys.stdout.isatty())' | cat\nFalse\n```\n\n良さそう。\n\n## pythonでもjqの振る舞いを模倣する\n\nあとはpythonでもjqの振る舞いを模倣するにはどうするかという話。isattyがTrueだったら色を付けて出力すれば良い。\n\n```python\nimport sys\n\nif sys.stdout.isatty():\n    COLOR_ON = \"[01;34m\"\n    COLOR_OFF = \"[01;34m\"\nelse:\n    COLOR_ON = \"\"\n    COLOR_OFF = \"\"\n\nprint(f\"{COLOR_ON}hello{COLOR_OFF} world\")\n```\n\n今度は色が付いたりつかなかったりしてくれる。\n\n[f:id:podhmo:20180908224315p:plain]"
+        },
+        "hatena:formatted-content": {
+          "@type": "text/html",
+          "@xmlns:hatena": "http://www.hatena.ne.jp/info/xmlns#",
+          "#text": "<h2>コマンド出力に色が着く</h2>\n\n<p><code>ls --color</code>などを実行すると文字に色が着く。こういうふうに。</p>\n\n<p><span itemscope itemtype=\"http://schema.org/Photograph\"><img src=\"https://cdn-ak.f.st-hatena.com/images/fotolife/p/podhmo/20180908/20180908224043.png\" alt=\"f:id:podhmo:20180908224043p:plain\" title=\"f:id:podhmo:20180908224043p:plain\" class=\"hatena-fotolife\" itemprop=\"image\"></span></p>\n\n<p>これは<code>jq</code>も同じで普通にコマンドを実行すると色が着く。\n<span itemscope itemtype=\"http://schema.org/Photograph\"><img src=\"https://cdn-ak.f.st-hatena.com/images/fotolife/p/podhmo/20180908/20180908224108.png\" alt=\"f:id:podhmo:20180908224108p:plain\" title=\"f:id:podhmo:20180908224108p:plain\" class=\"hatena-fotolife\" itemprop=\"image\"></span></p>\n\n<h3><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>で</h3>\n\n<p>これらは<a href=\"https://en.wikipedia.org/wiki/ANSI_escape_code\">ansi-color-code</a>付きで出力されているので色が着く。<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>でやってみるとこういう感じ。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink><span class=\"synIdentifier\">print</span>(<span class=\"synConstant\">&quot;[01;34mhello[0m world&quot;</span>)\n</pre>\n\n\n<p><span itemscope itemtype=\"http://schema.org/Photograph\"><img src=\"https://cdn-ak.f.st-hatena.com/images/fotolife/p/podhmo/20180908/20180908224206.png\" alt=\"f:id:podhmo:20180908224206p:plain\" title=\"f:id:podhmo:20180908224206p:plain\" class=\"hatena-fotolife\" itemprop=\"image\"></span></p>\n\n<h2>リダイレクトしたりパイプでつなげると色がなくなる。</h2>\n\n<p><code>ls --color</code>はリダイレクトしたりパイプでつなげても色が残るのに対して、<code>jq</code>はリダイレクトすると色が消える。例えばjqの出力をcatに渡してみる。色が消える。</p>\n\n<p><span itemscope itemtype=\"http://schema.org/Photograph\"><img src=\"https://cdn-ak.f.st-hatena.com/images/fotolife/p/podhmo/20180908/20180908224232.png\" alt=\"f:id:podhmo:20180908224232p:plain\" title=\"f:id:podhmo:20180908224232p:plain\" class=\"hatena-fotolife\" itemprop=\"image\"></span></p>\n\n<p>この振る舞いはどうやっているんだろう？というのが今回の話。</p>\n\n<h2>isatty</h2>\n\n<p>正体はisattyでこれは渡されたファイル<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%C7%A5%A3%A5%B9%A5%AF%A5%EA%A5%D7%A5%BF\">ディスクリプタ</a>がターミナルから開かれているかどうか調べてくれるもの。実際jqなどのコードを覗いてみたら<a href=\"https://github.com/stedolan/jq/blob/341a5fcab34a19e155810e281e550f17d17b809f/src/main.c#L522-L529\">使われている箇所</a>があった。</p>\n\n<p>おもむろにmanを見てみるとそれっぽいことが書かれている。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>NAME\n       isatty - test whether a file descriptor refers to a terminal\n\nSYNOPSIS\n       #include &lt;unistd.h&gt;\n\n       int isatty(int fd);\n\nDESCRIPTION\n       The isatty() function tests whether fd is an open file descriptor referring to a terminal.\n\nRETURN VALUE\n       isatty() returns 1 if fd is an open file descriptor referring to a terminal; otherwise 0 is returned, and errno is set to indicate the error.</pre>\n\n\n<h2><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>でもisatty</h2>\n\n<p><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>にもisattyは存在していて、<a href=\"https://docs.python.jp/3/library/os.html#os.isatty\">os.isatty()</a>を使っても良いけれど。</p>\n\n<blockquote><p>ファイル記述子 fd がオープンされていて、 tty (のような) デ<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%D0%A5%A4%A5%B9\">バイス</a>に接続されている場合、 True を返します。そうでない場合は False を返します。</p></blockquote>\n\n<p>標準出力などが<code>isatty()</code>メソッドを持っているのでこれを使えば良い。</p>\n\n<p>実際に使って確かめてみる。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ python -c &#39;import sys; print(sys.stdout.isatty())&#39;\nTrue\n$ python -c &#39;import sys; print(sys.stdout.isatty())&#39; | cat\nFalse</pre>\n\n\n<p>良さそう。</p>\n\n<h2><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>でもjqの振る舞いを模倣する</h2>\n\n<p>あとは<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>でもjqの振る舞いを模倣するにはどうするかという話。isattyがTrueだったら色を付けて出力すれば良い。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink><span class=\"synPreProc\">import</span> sys\n\n<span class=\"synStatement\">if</span> sys.stdout.isatty():\n    COLOR_ON = <span class=\"synConstant\">&quot;[01;34m&quot;</span>\n    COLOR_OFF = <span class=\"synConstant\">&quot;[01;34m&quot;</span>\n<span class=\"synStatement\">else</span>:\n    COLOR_ON = <span class=\"synConstant\">&quot;&quot;</span>\n    COLOR_OFF = <span class=\"synConstant\">&quot;&quot;</span>\n\n<span class=\"synIdentifier\">print</span>(f<span class=\"synConstant\">&quot;{COLOR_ON}hello{COLOR_OFF} world&quot;</span>)\n</pre>\n\n\n<p>今度は色が付いたりつかなかったりしてくれる。</p>\n\n<p><span itemscope itemtype=\"http://schema.org/Photograph\"><img src=\"https://cdn-ak.f.st-hatena.com/images/fotolife/p/podhmo/20180908/20180908224315.png\" alt=\"f:id:podhmo:20180908224315p:plain\" title=\"f:id:podhmo:20180908224315p:plain\" class=\"hatena-fotolife\" itemprop=\"image\"></span></p>"
+        },
+        "category": [
+          {
+            "@term": "python"
+          },
+          {
+            "@term": "memo"
+          },
+          {
+            "@term": "isatty"
+          },
+          {
+            "@term": "jq"
+          }
+        ],
+        "app:control": {
+          "app:draft": "no"
+        }
+      },
+      {
+        "id": "tag:blog.hatena.ne.jp,2013:blog-podhmo-13208692334729901491-10257846132624302999",
+        "link": [
+          {
+            "@rel": "edit",
+            "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry/10257846132624302999"
+          },
+          {
+            "@rel": "alternate",
+            "@type": "text/html",
+            "@href": "https://pod.hatenablog.com/entry/2018/09/08/214626"
+          }
+        ],
+        "author": {
+          "name": "podhmo"
+        },
+        "title": "手元のファイルのansi color codeを取り除きたい場合の関数",
+        "updated": "2018-09-08T21:46:26+09:00",
+        "published": "2018-09-08T21:46:26+09:00",
+        "app:edited": "2018-09-08T21:46:26+09:00",
+        "summary": {
+          "@type": "text",
+          "#text": "手元でテキトウに正規表現作っただけなのでミスっているかも。 (defun my:strip-ansi-color-region (beg end) (interactive \"r\") (unless (region-active-p) (setq beg (point-min))…"
+        },
+        "content": {
+          "@type": "text/x-markdown",
+          "#text": "手元でテキトウに正規表現作っただけなのでミスっているかも。\n\n```lisp\n(defun my:strip-ansi-color-region (beg end)\n  (interactive \"r\")\n  (unless (region-active-p)\n    (setq beg (point-min))\n    (setq end (point-max)))\n  (save-excursion\n    (save-restriction\n      (narrow-to-region beg end)\n      (goto-char (point-min))\n      (while (re-search-forward \"\\\\[[0-9]+;?[0-9]*m\" nil t 1)\n        (replace-match \"\")\n        ))))\n```\n\nこういうreplace-regexpを模したような関数をけっこう定義している気がする。\n\n```lisp\n(replace-regexp \"\\\\[[0-9]+;?[0-9]*m\" \"\")\n```\n\n- [ANSI escape code - Wikipedia](https://en.wikipedia.org/wiki/ANSI_escape_code \"ANSI escape code - Wikipedia\")"
+        },
+        "hatena:formatted-content": {
+          "@type": "text/html",
+          "@xmlns:hatena": "http://www.hatena.ne.jp/info/xmlns#",
+          "#text": "<p>手元でテキトウに<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%C0%B5%B5%AC%C9%BD%B8%BD\">正規表現</a>作っただけなのでミスっているかも。</p>\n\n<pre class=\"code lang-lisp\" data-lang=\"lisp\" data-unlink><span class=\"synSpecial\">(</span><span class=\"synStatement\">defun</span> my:strip-ansi-color-region <span class=\"synSpecial\">(</span>beg end<span class=\"synSpecial\">)</span>\n  <span class=\"synSpecial\">(</span>interactive <span class=\"synConstant\">&quot;r&quot;</span><span class=\"synSpecial\">)</span>\n  <span class=\"synSpecial\">(</span><span class=\"synStatement\">unless</span> <span class=\"synSpecial\">(</span>region-active-p<span class=\"synSpecial\">)</span>\n    <span class=\"synSpecial\">(</span><span class=\"synStatement\">setq</span> beg <span class=\"synSpecial\">(</span>point-min<span class=\"synSpecial\">))</span>\n    <span class=\"synSpecial\">(</span><span class=\"synStatement\">setq</span> end <span class=\"synSpecial\">(</span>point-max<span class=\"synSpecial\">)))</span>\n  <span class=\"synSpecial\">(</span>save-excursion\n    <span class=\"synSpecial\">(</span>save-restriction\n      <span class=\"synSpecial\">(</span>narrow-to-region beg end<span class=\"synSpecial\">)</span>\n      <span class=\"synSpecial\">(</span>goto-char <span class=\"synSpecial\">(</span>point-min<span class=\"synSpecial\">))</span>\n      <span class=\"synSpecial\">(</span>while <span class=\"synSpecial\">(</span>re-search-forward <span class=\"synConstant\">&quot;\\\\[[0-9]+;?[0-9]*m&quot;</span> <span class=\"synStatement\">nil</span> <span class=\"synStatement\">t</span> <span class=\"synConstant\">1</span><span class=\"synSpecial\">)</span>\n        <span class=\"synSpecial\">(</span>replace-match <span class=\"synConstant\">&quot;&quot;</span><span class=\"synSpecial\">)</span>\n        <span class=\"synSpecial\">))))</span>\n</pre>\n\n\n<p>こういうreplace-<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/regexp\">regexp</a>を模したような関数をけっこう定義している気がする。</p>\n\n<pre class=\"code lang-lisp\" data-lang=\"lisp\" data-unlink><span class=\"synSpecial\">(</span>replace-regexp <span class=\"synConstant\">&quot;\\\\[[0-9]+;?[0-9]*m&quot;</span> <span class=\"synConstant\">&quot;&quot;</span><span class=\"synSpecial\">)</span>\n</pre>\n\n\n<ul>\n<li><a href=\"https://en.wikipedia.org/wiki/ANSI_escape_code\" title=\"ANSI escape code - Wikipedia\">ANSI escape code - Wikipedia</a></li>\n</ul>"
+        },
+        "category": [
+          {
+            "@term": "emacs"
+          },
+          {
+            "@term": "memo"
+          }
+        ],
+        "app:control": {
+          "app:draft": "no"
+        }
+      },
+      {
+        "id": "tag:blog.hatena.ne.jp,2013:blog-podhmo-13208692334729901491-10257846132619492005",
+        "link": [
+          {
+            "@rel": "edit",
+            "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry/10257846132619492005"
+          },
+          {
+            "@rel": "alternate",
+            "@type": "text/html",
+            "@href": "https://pod.hatenablog.com/entry/2018/09/04/002153"
+          }
+        ],
+        "author": {
+          "name": "podhmo"
+        },
+        "title": "gcloudやgoogle-api-python-clientの使うcredentialsを見る",
+        "updated": "2018-09-04T00:21:53+09:00",
+        "published": "2018-09-04T00:21:53+09:00",
+        "app:edited": "2018-09-04T00:21:53+09:00",
+        "summary": {
+          "@type": "text",
+          "#text": "メモ。 gcloud sqliteにはいっているみたい $ file ~/.config/gcloud/credentials.db 2>&1| sed \"s@$HOME@HOME@\" HOME/.config/gcloud/credentials.db: SQLite 3.x …"
+        },
+        "content": {
+          "@type": "text/x-markdown",
+          "#text": "メモ。\n\n## gcloud\n\nsqliteにはいっているみたい\n\n```\n$ file ~/.config/gcloud/credentials.db 2>&1| sed \"s@$HOME@HOME@\"\nHOME/.config/gcloud/credentials.db: SQLite 3.x database, last written using SQLite version 3024000\n```\n\nおもむろに取り出すと、access_token、refresh_tokenなどが見える。\n\n```\n$ sqlite3 ~/.config/gcloud/credentials.db\nsqlite> .tables credentials\ncredentials\nsqlite> .schema credentials\nCREATE TABLE IF NOT EXISTS \"credentials\" (account_id TEXT PRIMARY KEY, value BLOB);\n$ sqlite3 ~/.config/gcloud/credentials.db \"select value from credentials;\"\n{\n  \"client_id\": \"xxxxxxxxxxx.apps.googleusercontent.com\",\n  \"client_secret\": \"XxxxXXxXxxxxxxXxXXxxxxxx\",\n  \"id_token\": {\n    \"at_hash\": \"xxxxxXXxxxXXXXxXxXXxXX\",\n    \"aud\": \"xxxxxxxxxxx.apps.googleusercontent.com\",\n    \"azp\": \"xxxxxxxxxxx.apps.googleusercontent.com\",\n    \"email\": \"xxxxxxxxx@gmail.com\",\n    \"email_verified\": true,\n    \"exp\": xxxxxxxxxx,\n    \"iat\": xxxxxxxxxx,\n    \"iss\": \"https://accounts.google.com\",\n    \"sub\": \"xxxxxxxxxxxxxxxxxxxxx\"\n  },\n  \"refresh_token\": \"xxXxXXxxxXXXxxxxXXxXxXxXXxxXxxxxXxxXxXXxXxxXX\",\n  \"revoke_uri\": \"https://accounts.google.com/o/oauth2/revoke\",\n  \"scopes\": [\n    \"https://www.googleapis.com/auth/compute\",\n    \"https://www.googleapis.com/auth/userinfo.email\",\n    \"https://www.googleapis.com/auth/cloud-platform\",\n    \"https://www.googleapis.com/auth/appengine.admin\",\n    \"https://www.googleapis.com/auth/accounts.reauth\"\n  ],\n  \"token_response\": {\n    \"access_token\": \"xxxxxXxxXXxXxxxxXXxXXxxxXxxxxXXxXxxxXxXxxxXxXxxxxXxxxXxxXXXxXxXXXxXxxxxXxxxxxxXxXXxXxXxxXXxXXXxXXxxXxXXxXxxxxXxxxxxXXXxxXXXxXXxxx\",\n    \"expires_in\": 3600,\n    \"id_token\": \"xxXxxXxxXxXXXxXxXxXxXxxxXXXxXxXxXxxxXXXxXxXxXxXxXxXxXxXxXxxxXXXxXXXxXXXxXXxxXxXxXXXxxXxxxXxxxXxXxXxXxXxXXxxXXXxXXxxxXXxXxxxxxxxXXXxXXXxxxxxXXxxXxXxxXXxXxXxXXXxXxXxXXXxXXXxXXXxXxXxxXXxXxxxXxxxxXXxxxXxxxXxxxXxXxxxXxxxxxXxXxxxXXXxXXXxXXXxXXxxXXXxXXXxXXxxXxxxXXxxxXxxXxXxXxXxxxXxXxXXXxxxxXxxXxxxXxxxXXxxxXxxxxXxxXXxXXXxXxXxxXXxXxXxXxxxxxxxXxXxXXxxXXXXXXxxXXXXXxXXXXXxXxXXXxxxXXxxXxxxXXXxXXxxXXXxXXXxxxXxXxXxxXXxxxxxXxXxXxxxxxXxXxxxxxxxXXxxxxxxXXXxXXXxXxXxXxXxXXXxXxXxxXxxXXXxxXxxxxxXxxXXxxxXxxXxXxxXXXXxxXXXXxxxXxxXxxxxxxXxxXxXXxXXXxxxxXxXxxXXXXXxxxXxxXxxxXXXxXXXXxxXxxxxXXXxXxxxXxXXxxxxxXxXxXxXxxXxxXxxxxXXxXxxxXXxxXxxXxxXXxxxxXXxxxXxXxXXxXxxxXXXxXxXxxXxXXxXXXXXxxXxxXxxxxxxxxXxxXxXXXxxxXxXxXxxXxXXxXxXxxxxxxXxxxxxXxxxxXxxXxXxXxXXxxxxxXxXxXxxxXxXxxXxXxxxxXXxXxxxxXXXXxxxxxxXxxxxXXxXXxxXxXxXxXxxxxXxxxxxxxXxxxx\",\n    \"refresh_token\": \"xxXxXXxxxXXXxxxxXXxXxXxXXxxXxxxxXxxXxXXxXxxXX\",\n    \"scope\": \"https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/accounts.reauth https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/compute https://www.googleapis.com/auth/appengine.admin\",\n    \"token_type\": \"Bearer\"\n  },\n  \"token_uri\": \"https://www.googleapis.com/oauth2/v4/token\",\n  \"type\": \"authorized_user\",\n  \"user_agent\": \"google-cloud-sdk\"\n}\n```\n\n\n## google-api-python-client\n\ngoogle-api-python-clientを使ったコードについて(たとえば[これ](https://developers.google.com/sheets/api/quickstart/python)とか)。\n\n以下の部分が重要。\n\n```python\nfrom oauth2client import file, client, tools\n\nSCOPES = 'https://www.googleapis.com/auth/spreadsheets.readonly'\n\ndef main():\n    store = file.Storage('token.json')\n    creds = store.get()\n    if not creds or creds.invalid:\n        flow = client.flow_from_clientsecrets('credentials.json', SCOPES)\n        creds = tools.run_flow(flow, store)\n    service = build('sheets', 'v4', http=creds.authorize(Http()))\n```\n\n1. oauth2client.file.Storageに入っている情報があればそれを使う(defaultでは\"./token.json\")\n2. なければ、oauth2client.tools.run_flowを使ってoauth2の認証に飛ぶ(このときcredentials.jsonを見る)\n\nつまり、token.jsonにaccess tokenなどが存在する。\n\ntoken.json\n\n```json\n{\n  \"_class\": \"OAuth2Credentials\",\n  \"_module\": \"oauth2client.client\",\n  \"access_token\": \"xxxxxXxxXXxXXxxxxXxxxXxxxxXXXxxxxXxxxXxxXXXXXxXxxxXXxXXXXxxxxxXXXxXXxxxXxxXxXxXXXXXxXxxxxXxxxXxxxxxxxxxxxxXXxxxXxxXxxxxxXxxXxxxxx\",\n  \"client_id\": \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com\",\n  \"client_secret\": \"xXxXxXxxxXxxXXxXxxXXxxXx\",\n  \"id_token\": null,\n  \"id_token_jwt\": null,\n  \"invalid\": false,\n  \"refresh_token\": \"xxxxxxXXXxxxXXXxXxXXxXxxxxxxxXXXXXxxxxXXxXXxXxxxxXxxXxXxxxxXXXxxxx\",\n  \"revoke_uri\": \"https://accounts.google.com/o/oauth2/revoke\",\n  \"scopes\": [\n    \"https://www.googleapis.com/auth/spreadsheets.readonly\"\n  ],\n  \"token_expiry\": \"2018-09-03T14:58:14Z\",\n  \"token_info_uri\": \"https://www.googleapis.com/oauth2/v3/tokeninfo\",\n  \"token_response\": {\n    \"access_token\": \"xxxxxXxxXXxXXxxxxXxxxXxxxxXXXxxxxXxxxXxxXXXXXxXxxxXXxXXXXxxxxxXXXxXXxxxXxxXxXxXXXXXxXxxxxXxxxXxxxxxxxxxxxxXXxxxXxxXxxxxxXxxXxxxxx\",\n    \"expires_in\": 3600,\n    \"refresh_token\": \"xxxxxxXXXxxxXXXxXxXXxXxxxxxxxXXXXXxxxxXXxXXxXxxxxXxxXxXxxxxXXXxxxx\",\n    \"scope\": \"https://www.googleapis.com/auth/spreadsheets.readonly\",\n    \"token_type\": \"Bearer\"\n  },\n  \"token_uri\": \"https://www.googleapis.com/oauth2/v3/token\",\n  \"user_agent\": null\n}\n```\n\nちなみにcredentials.jsonはこういうやつ。\n\n```json\n{\n  \"installed\": {\n    \"auth_provider_x509_cert_url\": \"https://www.googleapis.com/oauth2/v1/certs\",\n    \"auth_uri\": \"https://accounts.google.com/o/oauth2/auth\",\n    \"client_id\": \"xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com\",\n    \"client_secret\": \"xXxXxXxxxXxxXXxXxxXXxxXx\",\n    \"project_id\": \"xxxxxx-xxxxxxx-xxxxxx\",\n    \"redirect_uris\": [\n      \"urn:ietf:wg:oauth:2.0:oob\",\n      \"http://localhost\"\n    ],\n    \"token_uri\": \"https://www.googleapis.com/oauth2/v3/token\"\n  }\n}\n```"
+        },
+        "hatena:formatted-content": {
+          "@type": "text/html",
+          "@xmlns:hatena": "http://www.hatena.ne.jp/info/xmlns#",
+          "#text": "<p>メモ。</p>\n\n<h2>gcloud</h2>\n\n<p><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/sqlite\">sqlite</a>にはいっているみたい</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ file ~/.config/gcloud/credentials.db 2&gt;&amp;1| sed &#34;s@$HOME@HOME@&#34;\nHOME/.config/gcloud/credentials.db: SQLite 3.x database, last written using SQLite version 3024000</pre>\n\n\n<p>おもむろに取り出すと、<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/access\">access</a>_token、refresh_tokenなどが見える。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ sqlite3 ~/.config/gcloud/credentials.db\nsqlite&gt; .tables credentials\ncredentials\nsqlite&gt; .schema credentials\nCREATE TABLE IF NOT EXISTS &#34;credentials&#34; (account_id TEXT PRIMARY KEY, value BLOB);\n$ sqlite3 ~/.config/gcloud/credentials.db &#34;select value from credentials;&#34;\n{\n  &#34;client_id&#34;: &#34;xxxxxxxxxxx.apps.googleusercontent.com&#34;,\n  &#34;client_secret&#34;: &#34;XxxxXXxXxxxxxxXxXXxxxxxx&#34;,\n  &#34;id_token&#34;: {\n    &#34;at_hash&#34;: &#34;xxxxxXXxxxXXXXxXxXXxXX&#34;,\n    &#34;aud&#34;: &#34;xxxxxxxxxxx.apps.googleusercontent.com&#34;,\n    &#34;azp&#34;: &#34;xxxxxxxxxxx.apps.googleusercontent.com&#34;,\n    &#34;email&#34;: &#34;xxxxxxxxx@gmail.com&#34;,\n    &#34;email_verified&#34;: true,\n    &#34;exp&#34;: xxxxxxxxxx,\n    &#34;iat&#34;: xxxxxxxxxx,\n    &#34;iss&#34;: &#34;https://accounts.google.com&#34;,\n    &#34;sub&#34;: &#34;xxxxxxxxxxxxxxxxxxxxx&#34;\n  },\n  &#34;refresh_token&#34;: &#34;xxXxXXxxxXXXxxxxXXxXxXxXXxxXxxxxXxxXxXXxXxxXX&#34;,\n  &#34;revoke_uri&#34;: &#34;https://accounts.google.com/o/oauth2/revoke&#34;,\n  &#34;scopes&#34;: [\n    &#34;https://www.googleapis.com/auth/compute&#34;,\n    &#34;https://www.googleapis.com/auth/userinfo.email&#34;,\n    &#34;https://www.googleapis.com/auth/cloud-platform&#34;,\n    &#34;https://www.googleapis.com/auth/appengine.admin&#34;,\n    &#34;https://www.googleapis.com/auth/accounts.reauth&#34;\n  ],\n  &#34;token_response&#34;: {\n    &#34;access_token&#34;: &#34;xxxxxXxxXXxXxxxxXXxXXxxxXxxxxXXxXxxxXxXxxxXxXxxxxXxxxXxxXXXxXxXXXxXxxxxXxxxxxxXxXXxXxXxxXXxXXXxXXxxXxXXxXxxxxXxxxxxXXXxxXXXxXXxxx&#34;,\n    &#34;expires_in&#34;: 3600,\n    &#34;id_token&#34;: &#34;xxXxxXxxXxXXXxXxXxXxXxxxXXXxXxXxXxxxXXXxXxXxXxXxXxXxXxXxXxxxXXXxXXXxXXXxXXxxXxXxXXXxxXxxxXxxxXxXxXxXxXxXXxxXXXxXXxxxXXxXxxxxxxxXXXxXXXxxxxxXXxxXxXxxXXxXxXxXXXxXxXxXXXxXXXxXXXxXxXxxXXxXxxxXxxxxXXxxxXxxxXxxxXxXxxxXxxxxxXxXxxxXXXxXXXxXXXxXXxxXXXxXXXxXXxxXxxxXXxxxXxxXxXxXxXxxxXxXxXXXxxxxXxxXxxxXxxxXXxxxXxxxxXxxXXxXXXxXxXxxXXxXxXxXxxxxxxxXxXxXXxxXXXXXXxxXXXXXxXXXXXxXxXXXxxxXXxxXxxxXXXxXXxxXXXxXXXxxxXxXxXxxXXxxxxxXxXxXxxxxxXxXxxxxxxxXXxxxxxxXXXxXXXxXxXxXxXxXXXxXxXxxXxxXXXxxXxxxxxXxxXXxxxXxxXxXxxXXXXxxXXXXxxxXxxXxxxxxxXxxXxXXxXXXxxxxXxXxxXXXXXxxxXxxXxxxXXXxXXXXxxXxxxxXXXxXxxxXxXXxxxxxXxXxXxXxxXxxXxxxxXXxXxxxXXxxXxxXxxXXxxxxXXxxxXxXxXXxXxxxXXXxXxXxxXxXXxXXXXXxxXxxXxxxxxxxxXxxXxXXXxxxXxXxXxxXxXXxXxXxxxxxxXxxxxxXxxxxXxxXxXxXxXXxxxxxXxXxXxxxXxXxxXxXxxxxXXxXxxxxXXXXxxxxxxXxxxxXXxXXxxXxXxXxXxxxxXxxxxxxxXxxxx&#34;,\n    &#34;refresh_token&#34;: &#34;xxXxXXxxxXXXxxxxXXxXxXxXXxxXxxxxXxxXxXXxXxxXX&#34;,\n    &#34;scope&#34;: &#34;https://www.googleapis.com/auth/cloud-platform https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/accounts.reauth https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/compute https://www.googleapis.com/auth/appengine.admin&#34;,\n    &#34;token_type&#34;: &#34;Bearer&#34;\n  },\n  &#34;token_uri&#34;: &#34;https://www.googleapis.com/oauth2/v4/token&#34;,\n  &#34;type&#34;: &#34;authorized_user&#34;,\n  &#34;user_agent&#34;: &#34;google-cloud-sdk&#34;\n}</pre>\n\n\n<h2><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/google\">google</a>-<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/api\">api</a>-<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>-client</h2>\n\n<p><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/google\">google</a>-<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/api\">api</a>-<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>-clientを使ったコードについて(たとえば<a href=\"https://developers.google.com/sheets/api/quickstart/python\">これ</a>とか)。</p>\n\n<p>以下の部分が重要。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink><span class=\"synPreProc\">from</span> oauth2client <span class=\"synPreProc\">import</span> <span class=\"synIdentifier\">file</span>, client, tools\n\nSCOPES = <span class=\"synConstant\">'https://www.googleapis.com/auth/spreadsheets.readonly'</span>\n\n<span class=\"synStatement\">def</span> <span class=\"synIdentifier\">main</span>():\n    store = <span class=\"synIdentifier\">file</span>.Storage(<span class=\"synConstant\">'token.json'</span>)\n    creds = store.get()\n    <span class=\"synStatement\">if</span> <span class=\"synStatement\">not</span> creds <span class=\"synStatement\">or</span> creds.invalid:\n        flow = client.flow_from_clientsecrets(<span class=\"synConstant\">'credentials.json'</span>, SCOPES)\n        creds = tools.run_flow(flow, store)\n    service = build(<span class=\"synConstant\">'sheets'</span>, <span class=\"synConstant\">'v4'</span>, http=creds.authorize(Http()))\n</pre>\n\n\n<ol>\n<li>oauth2client.file.Storageに入っている情報があればそれを使う(defaultでは\"./token.<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/json\">json</a>\")</li>\n<li>なければ、oauth2client.tools.run_flowを使ってoauth2の認証に飛ぶ(このときcredentials.<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/json\">json</a>を見る)</li>\n</ol>\n\n\n<p>つまり、token.<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/json\">json</a>に<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/access\">access</a> tokenなどが存在する。</p>\n\n<p>token.<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/json\">json</a></p>\n\n<pre class=\"code lang-json\" data-lang=\"json\" data-unlink><span class=\"synSpecial\">{</span>\n  &quot;<span class=\"synStatement\">_class</span>&quot;: &quot;<span class=\"synConstant\">OAuth2Credentials</span>&quot;,\n  &quot;<span class=\"synStatement\">_module</span>&quot;: &quot;<span class=\"synConstant\">oauth2client.client</span>&quot;,\n  &quot;<span class=\"synStatement\">access_token</span>&quot;: &quot;<span class=\"synConstant\">xxxxxXxxXXxXXxxxxXxxxXxxxxXXXxxxxXxxxXxxXXXXXxXxxxXXxXXXXxxxxxXXXxXXxxxXxxXxXxXXXXXxXxxxxXxxxXxxxxxxxxxxxxXXxxxXxxXxxxxxXxxXxxxxx</span>&quot;,\n  &quot;<span class=\"synStatement\">client_id</span>&quot;: &quot;<span class=\"synConstant\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com</span>&quot;,\n  &quot;<span class=\"synStatement\">client_secret</span>&quot;: &quot;<span class=\"synConstant\">xXxXxXxxxXxxXXxXxxXXxxXx</span>&quot;,\n  &quot;<span class=\"synStatement\">id_token</span>&quot;: <span class=\"synIdentifier\">null</span>,\n  &quot;<span class=\"synStatement\">id_token_jwt</span>&quot;: <span class=\"synIdentifier\">null</span>,\n  &quot;<span class=\"synStatement\">invalid</span>&quot;: <span class=\"synConstant\">false</span>,\n  &quot;<span class=\"synStatement\">refresh_token</span>&quot;: &quot;<span class=\"synConstant\">xxxxxxXXXxxxXXXxXxXXxXxxxxxxxXXXXXxxxxXXxXXxXxxxxXxxXxXxxxxXXXxxxx</span>&quot;,\n  &quot;<span class=\"synStatement\">revoke_uri</span>&quot;: &quot;<span class=\"synConstant\">https://accounts.google.com/o/oauth2/revoke</span>&quot;,\n  &quot;<span class=\"synStatement\">scopes</span>&quot;: <span class=\"synSpecial\">[</span>\n    &quot;<span class=\"synConstant\">https://www.googleapis.com/auth/spreadsheets.readonly</span>&quot;\n  <span class=\"synSpecial\">]</span>,\n  &quot;<span class=\"synStatement\">token_expiry</span>&quot;: &quot;<span class=\"synConstant\">2018-09-03T14:58:14Z</span>&quot;,\n  &quot;<span class=\"synStatement\">token_info_uri</span>&quot;: &quot;<span class=\"synConstant\">https://www.googleapis.com/oauth2/v3/tokeninfo</span>&quot;,\n  &quot;<span class=\"synStatement\">token_response</span>&quot;: <span class=\"synSpecial\">{</span>\n    &quot;<span class=\"synStatement\">access_token</span>&quot;: &quot;<span class=\"synConstant\">xxxxxXxxXXxXXxxxxXxxxXxxxxXXXxxxxXxxxXxxXXXXXxXxxxXXxXXXXxxxxxXXXxXXxxxXxxXxXxXXXXXxXxxxxXxxxXxxxxxxxxxxxxXXxxxXxxXxxxxxXxxXxxxxx</span>&quot;,\n    &quot;<span class=\"synStatement\">expires_in</span>&quot;: <span class=\"synConstant\">3600</span>,\n    &quot;<span class=\"synStatement\">refresh_token</span>&quot;: &quot;<span class=\"synConstant\">xxxxxxXXXxxxXXXxXxXXxXxxxxxxxXXXXXxxxxXXxXXxXxxxxXxxXxXxxxxXXXxxxx</span>&quot;,\n    &quot;<span class=\"synStatement\">scope</span>&quot;: &quot;<span class=\"synConstant\">https://www.googleapis.com/auth/spreadsheets.readonly</span>&quot;,\n    &quot;<span class=\"synStatement\">token_type</span>&quot;: &quot;<span class=\"synConstant\">Bearer</span>&quot;\n  <span class=\"synSpecial\">}</span>,\n  &quot;<span class=\"synStatement\">token_uri</span>&quot;: &quot;<span class=\"synConstant\">https://www.googleapis.com/oauth2/v3/token</span>&quot;,\n  &quot;<span class=\"synStatement\">user_agent</span>&quot;: <span class=\"synIdentifier\">null</span>\n<span class=\"synSpecial\">}</span>\n</pre>\n\n\n<p>ちなみにcredentials.<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/json\">json</a>はこういうやつ。</p>\n\n<pre class=\"code lang-json\" data-lang=\"json\" data-unlink><span class=\"synSpecial\">{</span>\n  &quot;<span class=\"synStatement\">installed</span>&quot;: <span class=\"synSpecial\">{</span>\n    &quot;<span class=\"synStatement\">auth_provider_x509_cert_url</span>&quot;: &quot;<span class=\"synConstant\">https://www.googleapis.com/oauth2/v1/certs</span>&quot;,\n    &quot;<span class=\"synStatement\">auth_uri</span>&quot;: &quot;<span class=\"synConstant\">https://accounts.google.com/o/oauth2/auth</span>&quot;,\n    &quot;<span class=\"synStatement\">client_id</span>&quot;: &quot;<span class=\"synConstant\">xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx.apps.googleusercontent.com</span>&quot;,\n    &quot;<span class=\"synStatement\">client_secret</span>&quot;: &quot;<span class=\"synConstant\">xXxXxXxxxXxxXXxXxxXXxxXx</span>&quot;,\n    &quot;<span class=\"synStatement\">project_id</span>&quot;: &quot;<span class=\"synConstant\">xxxxxx-xxxxxxx-xxxxxx</span>&quot;,\n    &quot;<span class=\"synStatement\">redirect_uris</span>&quot;: <span class=\"synSpecial\">[</span>\n      &quot;<span class=\"synConstant\">urn:ietf:wg:oauth:2.0:oob</span>&quot;,\n      &quot;<span class=\"synConstant\">http://localhost</span>&quot;\n    <span class=\"synSpecial\">]</span>,\n    &quot;<span class=\"synStatement\">token_uri</span>&quot;: &quot;<span class=\"synConstant\">https://www.googleapis.com/oauth2/v3/token</span>&quot;\n  <span class=\"synSpecial\">}</span>\n<span class=\"synSpecial\">}</span>\n</pre>"
+        },
+        "category": [
+          {
+            "@term": "python"
+          },
+          {
+            "@term": "gcloud"
+          },
+          {
+            "@term": "memo"
+          }
+        ],
+        "app:control": {
+          "app:draft": "no"
+        }
+      },
+      {
+        "id": "tag:blog.hatena.ne.jp,2013:blog-podhmo-13208692334729901491-10257846132618587386",
+        "link": [
+          {
+            "@rel": "edit",
+            "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry/10257846132618587386"
+          },
+          {
+            "@rel": "alternate",
+            "@type": "text/html",
+            "@href": "https://pod.hatenablog.com/entry/2018/09/02/040714"
+          }
+        ],
+        "author": {
+          "name": "podhmo"
+        },
+        "title": "prestringの表現をASTから生成する機能を追加した",
+        "updated": "2018-09-02T11:09:48+09:00",
+        "published": "2018-09-02T04:07:14+09:00",
+        "app:edited": "2018-09-02T11:09:48+09:00",
+        "summary": {
+          "@type": "text",
+          "#text": "github.com 個人的にコード生成をするときにはprestringというパッケージをベースにして行うことが多い。テンプレートエンジンによるコード生成やASTを直接触る方法との差分は別の機会に書くとして今回追加しようとした機能についてまとめておく。 コード生成 コード生成とい…"
+        },
+        "content": {
+          "@type": "text/x-markdown",
+          "#text": "[https://github.com/podhmo/prestring:cite:embed]\n\n個人的にコード生成をするときにはprestringというパッケージをベースにして行うことが多い。テンプレートエンジンによるコード生成やASTを直接触る方法との差分は別の機会に書くとして今回追加しようとした機能についてまとめておく。\n\n## コード生成\n\nコード生成というのは何かの入力を元に何らかのコードを生成するもののこと。\n\n```\n<コード生成用のコード> + <設定> => <生成されたコード>\n```\n\nswagger関係のものなど巷にはコード生成用のツールが溢れていたりはする。しかし自分たちの利用している環境（コード）に則さないなどちょっと不便さを感じたときには調整する必要が出てきたりする。この調整に結構手間取ることが多い。\n\n自分で作るとなると今度はコード生成用のコードが必要になる（当たり前だけれど）。\n\n## コード生成用のコード\n\nここでのコード生成用のコードというのは実行するとソースコードになるコードのこと。例えば以下の様なコードを実行するとpythonのコードを出力する。\n\nhello.py\n\n```python\nfrom prestring.python import Module\nm = Module()  # noqa\nm.sep()\n\n\nwith m.def_('hello', 'name', '*', 'message: str =  \"hello world\"'):\n    m.docstring('greeting message')\n    m.stmt('print(f\"{name}: {message}\")')\n```\n\nwithがたくさん出てくる以外はある程度出力結果が透けて見える程度の構文。そうではあるのだけど手書きするのが面倒。\n\n生成後のコード\n\n```python\ndef hello(name, *, message: str = \"hello world\"):\n    \"\"\"greeting message\"\"\"\n    print(f\"{name}: {message}\")\n```\n\nこのようにコードを出力するようなコードをコード生成用のコードと呼んでいる（フォーマッターが必要、入力データの走査、並行実行、複数ファイルへの出力、実行速度など考えるべきことは他にも色々あるけれど今回は省略）。\n\n## コードからコード生成用のコードを生成する\n\nコード生成用のコードを書き始めるタイミングでは、出力後のコードのサンプルをリテラル的にそのまま書き下したいと言うことが多い。慣れればコード生成用のコードをそのまま直に書くということもできるようになっては来るのだけれど。やっぱりめんどくさい（ちなみにテンプレートエンジンでのコード生成は、このあたりのフェーズではけっこう高速に作業することができて、単にテンプレートに直接出力後のコードの文字列を記述するだけで良い）。この部分をどうにかしようという話。\n\n入力として出力後のコード例を受け取って、ASTを作り、ASTから出力用のコードを生成すれば良さそう。ということで作った。\n\n```\n生成されたコード(を模したもの)\n=> (AST)-> <コード生成用のコード> // ここの部分\n=> <コード生成用のコード>  + <設定>\n=> <生成されたコード>\n```\n\n例えば先程のhello.pyのコードを生成したい場合には以下の様なコードを書く。\n\n```python\ndef main():\n    import inspect\n    from prestring.python import Module\n    from prestring.python.transform import transform_string\n\n    m = Module()\n    source = inspect.getsource(hello)\n    m = transform_string(source, m=m)\n    print(m)\n```\n\ntransform_stringがコードの文字列を渡すと良い感じにやってくれる。inspectパッケージのgetsourceで自分自身のソースコードを取ってこれるのでこれを渡している。\n以下のような出力になる。\n\n```python\nwith m.def_('hello', 'name', '*', 'message: str =  \"hello world\"'):\n    m.docstring('greeting message')\n    m.stmt('print(f\"{name}: {message}\")')\n```\n\nちなみにtransform系のコマンドは3つある\n\n- transform_file -- ファイル名を渡して変換\n- transform_string -- ソースコード文字列を渡して変換\n- transform -- ASTを渡して変換\n\n(transform_objectなどもあって良いかもしれない)\n\n### コマンドとして実行\n\n毎回コードを書くのも面倒なのでコマンドとしても使えるようにした。入力としてソースコードのファイルを取る。\n\n```console\n$ python -m prestring.python.transform hello.py | tee hello.template.py\nfrom prestring.python import Module\nm = Module()  # noqa\nm.sep()\n\n\nwith m.def_('hello', 'name', '*', 'message: str =  \"hello world\"'):\n    m.docstring('greeting message')\n    m.stmt('print(f\"{name}: {message}\")')\n\n\nprint(m)\n```\n\n直接実行できるようなコードが生成されるので生成された結果を確かめられる。\n\n```console\n$ python hello.template.py | tee hello.output.py\n\n\ndef hello(name, *, message: str =  \"hello world\"):\n    \"\"\"\n    greeting message\n    \"\"\"\n    print(f\"{name}: {message}\")\n\n```\n\n`transform_string()` などに`m`を渡さなくても同様の振る舞いになるがこのあたりの挙動は変更するかもしれない。\n\n## 詳細\n\n途中で力尽きたのでおまけに近い。\n\n### ASTからのコード生成\n\npythonでASTを触るライブラリはたくさんあるのだけれど。とりあえず標準ライブラリの範囲でやることにした。ただし標準ライブラリの[ast](https://docs.python.jp/3/library/ast.html)パッケージはたしかコメントなどの情報が消えてしまったような記憶がある。そんなわけで[2to3(python2.xからpython3.xへの変換用のツール)](https://docs.python.jp/3/library/2to3.html)に使われているライブラリのlib2to3を拝借して使うことにした。ちなみに[yapf](https://github.com/google/yapf)というコードフォーマッターもこのライブラリを使っている。\n\nprestring.python.parseに小さなコード片を書いた。\n\ntransformと同様の感じで以下の様な関数がある。\n\n- parse_file\n- parse_string\n\nlib2to3のnodeはけっこう便利で、文字列化すると自動でソースコードになる。\n\n```\nfrom prestring.python.parse import parse_file, dump_tree\n\nt = parse_file(\"./hello.py\")\nprint(str(t))\n\n# def hello(name, *, message: str = \"hello world\"):\n#     \"\"\"greeting message\"\"\"\n#     print(f\"{name}: {message}\")\n```\n\n作ったASTはdump_treeで出力できる。\n\n```python\nfrom prestring.python.parse import parse_file, dump_tree\n\nt = parse_file(\"./hello.py\")\ndump_tree(t)\n```\n\n小さめのコードを渡しても出力が長い。\n\n```\nfile_input [2 children]\n  funcdef[name='hello'] [5 children]\n    NAME('def') [lineno=1, column=0, prefix='']\n    NAME('hello') [lineno=1, column=4, prefix=' ']\n    parameters [3 children]\n      LPAR('(') [lineno=1, column=9, prefix='']\n      typedargslist[args='name' ',' '*' ',' 'tname' '=' '\"hello world\"'] [7 children]\n        NAME('name') [lineno=1, column=10, prefix='']\n        COMMA(',') [lineno=1, column=14, prefix='']\n        STAR('*') [lineno=1, column=16, prefix=' ']\n        COMMA(',') [lineno=1, column=17, prefix='']\n        tname [3 children]\n          NAME('message') [lineno=1, column=19, prefix=' ']\n          COLON(':') [lineno=1, column=26, prefix='']\n          NAME('str') [lineno=1, column=28, prefix=' ']\n        EQUAL('=') [lineno=1, column=32, prefix=' ']\n        STRING('\"hello world\"') [lineno=1, column=34, prefix=' ']\n      RPAR(')') [lineno=1, column=47, prefix='']\n    COLON(':') [lineno=1, column=48, prefix='']\n    suite [5 children]\n      NEWLINE('\\n') [lineno=1, column=49, prefix='']\n      INDENT('    ') [lineno=2, column=0, prefix='']\n      simple_stmt [2 children]\n        STRING('\"\"\"greeting message\"\"\"') [lineno=2, column=4, prefix='']\n        NEWLINE('\\n') [lineno=2, column=26, prefix='']\n      simple_stmt [2 children]\n        power [2 children]\n          NAME('print') [lineno=3, column=4, prefix='    ']\n          trailer [3 children]\n            LPAR('(') [lineno=3, column=9, prefix='']\n            STRING('f\"{name}: {message}\"') [lineno=3, column=10, prefix='']\n            RPAR(')') [lineno=3, column=30, prefix='']\n        NEWLINE('\\n') [lineno=3, column=31, prefix='']\n      DEDENT('') [lineno=4, column=0, prefix='']\n  ENDMARKER('') [lineno=4, column=0, prefix='']\n```\n\n## ちなみに\n\nloggingライブラリのコードを変換すると[こんな感じ](https://gist.github.com/podhmo/a4d72ec02e1e464f03d43f6d22eeb01d)になります。"
+        },
+        "hatena:formatted-content": {
+          "@type": "text/html",
+          "@xmlns:hatena": "http://www.hatena.ne.jp/info/xmlns#",
+          "#text": "<p><cite class=\"hatena-citation\"><a href=\"https://github.com/podhmo/prestring\">github.com</a></cite><iframe src=\"https://hatenablog-parts.com/embed?url=https%3A%2F%2Fgithub.com%2Fpodhmo%2Fprestring\" title=\"podhmo/prestring\" class=\"embed-card embed-webcard\" scrolling=\"no\" frameborder=\"0\" style=\"display: block; width: 100%; height: 155px; max-width: 500px; margin: 10px 0px;\"></iframe></p>\n\n<p>個人的にコード生成をするときにはprestringというパッケージをベースにして行うことが多い。テンプレートエンジンによるコード生成やASTを直<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%C0%DC%BF%A8\">接触</a>る方法との差分は別の機会に書くとして今回追加しようとした機能についてまとめておく。</p>\n\n<h2>コード生成</h2>\n\n<p>コード生成というのは何かの入力を元に何らかのコードを生成するもののこと。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>&lt;コード生成用のコード&gt; + &lt;設定&gt; =&gt; &lt;生成されたコード&gt;</pre>\n\n\n<p>swagger関係のものなど巷にはコード生成用のツールが溢れていたりはする。しかし自分たちの利用している環境（コード）に則さないなどちょっと不便さを感じたときには調整する必要が出てきたりする。この調整に結構手間取ることが多い。</p>\n\n<p>自分で作るとなると今度はコード生成用のコードが必要になる（当たり前だけれど）。</p>\n\n<h2>コード生成用のコード</h2>\n\n<p>ここでのコード生成用のコードというのは実行すると<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%BD%A1%BC%A5%B9%A5%B3%A1%BC%A5%C9\">ソースコード</a>になるコードのこと。例えば以下の様なコードを実行すると<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>のコードを出力する。</p>\n\n<p>hello.py</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink><span class=\"synPreProc\">from</span> prestring.python <span class=\"synPreProc\">import</span> Module\nm = Module()  <span class=\"synComment\"># noqa</span>\nm.sep()\n\n\n<span class=\"synStatement\">with</span> m.def_(<span class=\"synConstant\">'hello'</span>, <span class=\"synConstant\">'name'</span>, <span class=\"synConstant\">'*'</span>, <span class=\"synConstant\">'message: str =  &quot;hello world&quot;'</span>):\n    m.docstring(<span class=\"synConstant\">'greeting message'</span>)\n    m.stmt(<span class=\"synConstant\">'print(f&quot;{name}: {message}&quot;)'</span>)\n</pre>\n\n\n<p>withがたくさん出てくる以外はある程度出力結果が透けて見える程度の構文。そうではあるのだけど手書きするのが面倒。</p>\n\n<p>生成後のコード</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink><span class=\"synStatement\">def</span> <span class=\"synIdentifier\">hello</span>(name, *, message: <span class=\"synIdentifier\">str</span> = <span class=\"synConstant\">&quot;hello world&quot;</span>):\n    <span class=\"synConstant\">&quot;&quot;&quot;greeting message&quot;&quot;&quot;</span>\n    <span class=\"synIdentifier\">print</span>(f<span class=\"synConstant\">&quot;{name}: {message}&quot;</span>)\n</pre>\n\n\n<p>このようにコードを出力するようなコードをコード生成用のコードと呼んでいる（フォーマッターが必要、入力データの走査、並行実行、複数ファイルへの出力、実行速度など考えるべきことは他にも色々あるけれど今回は省略）。</p>\n\n<h2>コードからコード生成用のコードを生成する</h2>\n\n<p>コード生成用のコードを書き始めるタイミングでは、出力後のコードのサンプルを<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%EA%A5%C6%A5%E9%A5%EB\">リテラル</a>的にそのまま書き下したいと言うことが多い。慣れればコード生成用のコードをそのまま直に書くということもできるようになっては来るのだけれど。やっぱりめんどくさい（ちなみにテンプレートエンジンでのコード生成は、このあたりのフェーズではけっこう高速に作業することができて、単にテンプレートに直接出力後のコードの文字列を記述するだけで良い）。この部分をどうにかしようという話。</p>\n\n<p>入力として出力後のコード例を受け取って、ASTを作り、ASTから出力用のコードを生成すれば良さそう。ということで作った。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>生成されたコード(を模したもの)\n=&gt; (AST)-&gt; &lt;コード生成用のコード&gt; // ここの部分\n=&gt; &lt;コード生成用のコード&gt;  + &lt;設定&gt;\n=&gt; &lt;生成されたコード&gt;</pre>\n\n\n<p>例えば先程のhello.pyのコードを生成したい場合には以下の様なコードを書く。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink><span class=\"synStatement\">def</span> <span class=\"synIdentifier\">main</span>():\n    <span class=\"synPreProc\">import</span> inspect\n    <span class=\"synPreProc\">from</span> prestring.python <span class=\"synPreProc\">import</span> Module\n    <span class=\"synPreProc\">from</span> prestring.python.transform <span class=\"synPreProc\">import</span> transform_string\n\n    m = Module()\n    source = inspect.getsource(hello)\n    m = transform_string(source, m=m)\n    <span class=\"synIdentifier\">print</span>(m)\n</pre>\n\n\n<p>transform_stringがコードの文字列を渡すと良い感じにやってくれる。inspectパッケージのgetsourceで自分自身の<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%BD%A1%BC%A5%B9%A5%B3%A1%BC%A5%C9\">ソースコード</a>を取ってこれるのでこれを渡している。\n以下のような出力になる。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink><span class=\"synStatement\">with</span> m.def_(<span class=\"synConstant\">'hello'</span>, <span class=\"synConstant\">'name'</span>, <span class=\"synConstant\">'*'</span>, <span class=\"synConstant\">'message: str =  &quot;hello world&quot;'</span>):\n    m.docstring(<span class=\"synConstant\">'greeting message'</span>)\n    m.stmt(<span class=\"synConstant\">'print(f&quot;{name}: {message}&quot;)'</span>)\n</pre>\n\n\n<p>ちなみにtransform系のコマンドは3つある</p>\n\n<ul>\n<li>transform_file -- ファイル名を渡して変換</li>\n<li>transform_string -- <a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%BD%A1%BC%A5%B9%A5%B3%A1%BC%A5%C9\">ソースコード</a>文字列を渡して変換</li>\n<li>transform -- ASTを渡して変換</li>\n</ul>\n\n\n<p>(transform_objectなどもあって良いかもしれない)</p>\n\n<h3>コマンドとして実行</h3>\n\n<p>毎回コードを書くのも面倒なのでコマンドとしても使えるようにした。入力として<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%BD%A1%BC%A5%B9%A5%B3%A1%BC%A5%C9\">ソースコード</a>のファイルを取る。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ python -m prestring.python.transform hello.py | tee hello.template.py\nfrom prestring.python import Module\nm = Module()  # noqa\nm.sep()\n\n\nwith m.def_(&#39;hello&#39;, &#39;name&#39;, &#39;*&#39;, &#39;message: str =  &#34;hello world&#34;&#39;):\n    m.docstring(&#39;greeting message&#39;)\n    m.stmt(&#39;print(f&#34;{name}: {message}&#34;)&#39;)\n\n\nprint(m)</pre>\n\n\n<p>直接実行できるようなコードが生成されるので生成された結果を確かめられる。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ python hello.template.py | tee hello.output.py\n\n\ndef hello(name, *, message: str =  &#34;hello world&#34;):\n    &#34;&#34;&#34;\n    greeting message\n    &#34;&#34;&#34;\n    print(f&#34;{name}: {message}&#34;)\n</pre>\n\n\n<p><code>transform_string()</code> などに<code>m</code>を渡さなくても同様の振る舞いになるがこのあたりの挙動は変更するかもしれない。</p>\n\n<h2>詳細</h2>\n\n<p>途中で力尽きたのでおまけに近い。</p>\n\n<h3>ASTからのコード生成</h3>\n\n<p><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>でASTを触るライブラリはたくさんあるのだけれど。とりあえず標準ライブラリの範囲でやることにした。ただし標準ライブラリの<a href=\"https://docs.python.jp/3/library/ast.html\">ast</a>パッケージはたしかコメントなどの情報が消えてしまったような記憶がある。そんなわけで<a href=\"https://docs.python.jp/3/library/2to3.html\">2to3(python2.xからpython3.xへの変換用のツール)</a>に使われているライブラリのlib2to3を拝借して使うことにした。ちなみに<a href=\"https://github.com/google/yapf\">yapf</a>というコードフォーマッターもこのライブラリを使っている。</p>\n\n<p>prestring.<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/python\">python</a>.parseに小さなコード片を書いた。</p>\n\n<p>transformと同様の感じで以下の様な関数がある。</p>\n\n<ul>\n<li>parse_file</li>\n<li>parse_string</li>\n</ul>\n\n\n<p>lib2to3のnodeはけっこう便利で、文字列化すると自動で<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%BD%A1%BC%A5%B9%A5%B3%A1%BC%A5%C9\">ソースコード</a>になる。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>from prestring.python.parse import parse_file, dump_tree\n\nt = parse_file(&#34;./hello.py&#34;)\nprint(str(t))\n\n# def hello(name, *, message: str = &#34;hello world&#34;):\n#     &#34;&#34;&#34;greeting message&#34;&#34;&#34;\n#     print(f&#34;{name}: {message}&#34;)</pre>\n\n\n<p>作ったASTはdump_treeで出力できる。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink><span class=\"synPreProc\">from</span> prestring.python.parse <span class=\"synPreProc\">import</span> parse_file, dump_tree\n\nt = parse_file(<span class=\"synConstant\">&quot;./hello.py&quot;</span>)\ndump_tree(t)\n</pre>\n\n\n<p>小さめのコードを渡しても出力が長い。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>file_input [2 children]\n  funcdef[name=&#39;hello&#39;] [5 children]\n    NAME(&#39;def&#39;) [lineno=1, column=0, prefix=&#39;&#39;]\n    NAME(&#39;hello&#39;) [lineno=1, column=4, prefix=&#39; &#39;]\n    parameters [3 children]\n      LPAR(&#39;(&#39;) [lineno=1, column=9, prefix=&#39;&#39;]\n      typedargslist[args=&#39;name&#39; &#39;,&#39; &#39;*&#39; &#39;,&#39; &#39;tname&#39; &#39;=&#39; &#39;&#34;hello world&#34;&#39;] [7 children]\n        NAME(&#39;name&#39;) [lineno=1, column=10, prefix=&#39;&#39;]\n        COMMA(&#39;,&#39;) [lineno=1, column=14, prefix=&#39;&#39;]\n        STAR(&#39;*&#39;) [lineno=1, column=16, prefix=&#39; &#39;]\n        COMMA(&#39;,&#39;) [lineno=1, column=17, prefix=&#39;&#39;]\n        tname [3 children]\n          NAME(&#39;message&#39;) [lineno=1, column=19, prefix=&#39; &#39;]\n          COLON(&#39;:&#39;) [lineno=1, column=26, prefix=&#39;&#39;]\n          NAME(&#39;str&#39;) [lineno=1, column=28, prefix=&#39; &#39;]\n        EQUAL(&#39;=&#39;) [lineno=1, column=32, prefix=&#39; &#39;]\n        STRING(&#39;&#34;hello world&#34;&#39;) [lineno=1, column=34, prefix=&#39; &#39;]\n      RPAR(&#39;)&#39;) [lineno=1, column=47, prefix=&#39;&#39;]\n    COLON(&#39;:&#39;) [lineno=1, column=48, prefix=&#39;&#39;]\n    suite [5 children]\n      NEWLINE(&#39;\\n&#39;) [lineno=1, column=49, prefix=&#39;&#39;]\n      INDENT(&#39;    &#39;) [lineno=2, column=0, prefix=&#39;&#39;]\n      simple_stmt [2 children]\n        STRING(&#39;&#34;&#34;&#34;greeting message&#34;&#34;&#34;&#39;) [lineno=2, column=4, prefix=&#39;&#39;]\n        NEWLINE(&#39;\\n&#39;) [lineno=2, column=26, prefix=&#39;&#39;]\n      simple_stmt [2 children]\n        power [2 children]\n          NAME(&#39;print&#39;) [lineno=3, column=4, prefix=&#39;    &#39;]\n          trailer [3 children]\n            LPAR(&#39;(&#39;) [lineno=3, column=9, prefix=&#39;&#39;]\n            STRING(&#39;f&#34;{name}: {message}&#34;&#39;) [lineno=3, column=10, prefix=&#39;&#39;]\n            RPAR(&#39;)&#39;) [lineno=3, column=30, prefix=&#39;&#39;]\n        NEWLINE(&#39;\\n&#39;) [lineno=3, column=31, prefix=&#39;&#39;]\n      DEDENT(&#39;&#39;) [lineno=4, column=0, prefix=&#39;&#39;]\n  ENDMARKER(&#39;&#39;) [lineno=4, column=0, prefix=&#39;&#39;]</pre>\n\n\n<h2>ちなみに</h2>\n\n<p>loggingライブラリのコードを変換すると<a href=\"https://gist.github.com/podhmo/a4d72ec02e1e464f03d43f6d22eeb01d\">こんな感じ</a>になります。</p>"
+        },
+        "category": [
+          {
+            "@term": "python"
+          },
+          {
+            "@term": "prestring"
+          },
+          {
+            "@term": "ast"
+          }
+        ],
+        "app:control": {
+          "app:draft": "no"
+        }
+      },
+      {
+        "id": "tag:blog.hatena.ne.jp,2013:blog-podhmo-13208692334729901491-10257846132616895045",
+        "link": [
+          {
+            "@rel": "edit",
+            "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry/10257846132616895045"
+          },
+          {
+            "@rel": "alternate",
+            "@type": "text/html",
+            "@href": "https://pod.hatenablog.com/entry/2018/08/30/210044"
+          }
+        ],
+        "author": {
+          "name": "podhmo"
+        },
+        "title": "pythonでescapeされた（？）文字列をunescape（？）する方法のメモ",
+        "updated": "2018-08-30T21:24:59+09:00",
+        "published": "2018-08-30T21:00:44+09:00",
+        "app:edited": "2018-08-30T21:24:59+09:00",
+        "summary": {
+          "@type": "text",
+          "#text": "時折変換の仕方などを忘れてしまい調べることなどがあるので。個人的なメモ。 JSONの文字列表現の文字列 JSONの文字列表現の文字列。なんて言えば良いんだろ？こういうやつ。 \"{\\\"name\\\": \\\"foo\\\", \\\"age\\\": 20}\" とりあえず、unicode-esca…"
+        },
+        "content": {
+          "@type": "text/x-markdown",
+          "#text": "時折変換の仕方などを忘れてしまい調べることなどがあるので。個人的なメモ。\n\n## JSONの文字列表現の文字列\n\nJSONの文字列表現の文字列。なんて言えば良いんだろ？こういうやつ。\n\n```\n\"{\\\"name\\\": \\\"foo\\\", \\\"age\\\": 20}\"\n```\n\nとりあえず、unicode-escapeを使ってどうにかする。\n\n```python\n>>> s = '\"{\\\"name\\\": \\\"foo\\\", \\\"age\\\": 20}\"'\n>>> s.encode(\"utf-8\").decode(\"unicode-escape\").strip('\"\\n ')\n'{\"name\": \"foo\", \"age\": 20}'\n```\n\n## Unicodeリテラル\n\nこういうやつ。これもunicode-escapeでdecodeしてあげるのが良い。\n\n```\n'\\\\u3042'\n```\n\n最初がstrならencodeでbytesにする必要がある。\n\n```python\n>>> '\\\\u3042'.encode().decode(\"unicode-escape\")\n'あ'\n\n# bytesのとき\n>>> b'\\\\u3042'.decode(\"unicode-escape\")\n'あ'\n```\n\nたとえば、json.dumpsにensure_asciiを指定しなかった場合に現れたりする。\n\n```python\n>>> import json\n>>> json.dumps(\"あ\")\n'\"\\\\u3042\"'\n>>> json.dumps(\"あ\", ensure_ascii=False)\n'\"あ\"'\n```\n\nもちろん、unicode-escapeでencodeしてあげても作れる。\n\n```python\n>>> 'あ'.encode(\"unicode-escape\")\nb'\\\\u3042'\n```\n\n## htmlなどでの数値文字参照(xmlcharref)\n\nこういうやつ。[wikipedia](https://ja.wikipedia.org/wiki/%E6%96%87%E5%AD%97%E5%8F%82%E7%85%A7)\n\n```\n'&#12354;'\n```\n\nたまに、スクレイピングしていたりするとクローラーが保存する文字列がこの形になっている場合がある。あるいは何らかのAPIがこの表現で返ってくるということがある。\n\nこれは[html](https://docs.python.org/3/library/html.html#html.escape)パッケージのunescapeを使うと良い。\n\n```python\n>>> import html\n>>> html.unescape('&#12354;')\n'あ'\n```\n\nちなみにencode時のエラーハンドラーを利用してこの表現を作ることができる。\n\n```python\n>>> 'あ'.encode(\"ascii\", \"xmlcharrefreplace\")\nb'&#12354;'\n\n# その他色々な表現も\n>>> \"あ\".encode(\"ascii\", \"backslashreplace\")\nb'\\\\u3042'\n>>> \"あ\".encode(\"ascii\", \"namereplace\")\nb'\\\\N{HIRAGANA LETTER A}'\n```\n\n詳しくはドキュメントの[エラーハンドラーの部分](https://docs.python.jp/3/library/codecs.html#error-handlers)を\n\n## 追記: URLクォート\n\nこれも一応ここに入れてしまう。こういうやつ。\n\n```\n'%E3%81%82'\n```\n\nURL上にマルチバイト文字を載せるときこの形式になることが多い。[urllib.parse](https://docs.python.jp/3/library/urllib.parse.html)のquoteやunquoteを使う(空白も置き換えたい場合にはplusの方を)。\n\n```python\n>>> import urllib.parse as p\n>>> p.unquote('%E3%81%82')\n'あ'\n```\n\n## 参考\n\n- https://ja.wikipedia.org/wiki/%E6%96%87%E5%AD%97%E5%8F%82%E7%85%A7\n- https://docs.python.jp/3/howto/unicode.html\n- https://docs.python.jp/3/library/codecs.html#error-handlers\n- https://docs.python.org/3/library/html.html\n- https://docs.python.jp/3/library/urllib.parse.html"
+        },
+        "hatena:formatted-content": {
+          "@type": "text/html",
+          "@xmlns:hatena": "http://www.hatena.ne.jp/info/xmlns#",
+          "#text": "<p>時折変換の仕方などを忘れてしまい調べることなどがあるので。個人的なメモ。</p>\n\n<h2><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/JSON\">JSON</a>の文字列表現の文字列</h2>\n\n<p><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/JSON\">JSON</a>の文字列表現の文字列。なんて言えば良いんだろ？こういうやつ。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>&#34;{\\&#34;name\\&#34;: \\&#34;foo\\&#34;, \\&#34;age\\&#34;: 20}&#34;</pre>\n\n\n<p>とりあえず、<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/unicode\">unicode</a>-escapeを使ってどうにかする。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink>&gt;&gt;&gt; s = <span class=\"synConstant\">'&quot;{</span><span class=\"synSpecial\">\\&quot;</span><span class=\"synConstant\">name</span><span class=\"synSpecial\">\\&quot;</span><span class=\"synConstant\">: </span><span class=\"synSpecial\">\\&quot;</span><span class=\"synConstant\">foo</span><span class=\"synSpecial\">\\&quot;</span><span class=\"synConstant\">, </span><span class=\"synSpecial\">\\&quot;</span><span class=\"synConstant\">age</span><span class=\"synSpecial\">\\&quot;</span><span class=\"synConstant\">: 20}&quot;'</span>\n&gt;&gt;&gt; s.encode(<span class=\"synConstant\">&quot;utf-8&quot;</span>).decode(<span class=\"synConstant\">&quot;unicode-escape&quot;</span>).strip(<span class=\"synConstant\">'&quot;</span><span class=\"synSpecial\">\\n</span><span class=\"synConstant\"> '</span>)\n<span class=\"synConstant\">'{&quot;name&quot;: &quot;foo&quot;, &quot;age&quot;: 20}'</span>\n</pre>\n\n\n<h2><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/Unicode\">Unicode</a><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%EA%A5%C6%A5%E9%A5%EB\">リテラル</a></h2>\n\n<p>こういうやつ。これも<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/unicode\">unicode</a>-escapeでdecodeしてあげるのが良い。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>&#39;\\\\u3042&#39;</pre>\n\n\n<p>最初がstrならencodeでbytesにする必要がある。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink>&gt;&gt;&gt; <span class=\"synConstant\">'</span><span class=\"synSpecial\">\\\\</span><span class=\"synConstant\">u3042'</span>.encode().decode(<span class=\"synConstant\">&quot;unicode-escape&quot;</span>)\n<span class=\"synConstant\">'あ'</span>\n\n<span class=\"synComment\"># bytesのとき</span>\n&gt;&gt;&gt; b<span class=\"synConstant\">'</span><span class=\"synSpecial\">\\\\</span><span class=\"synConstant\">u3042'</span>.decode(<span class=\"synConstant\">&quot;unicode-escape&quot;</span>)\n<span class=\"synConstant\">'あ'</span>\n</pre>\n\n\n<p>たとえば、<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/json\">json</a>.dumpsにensure_asciiを指定しなかった場合に現れたりする。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink>&gt;&gt;&gt; <span class=\"synPreProc\">import</span> json\n&gt;&gt;&gt; json.dumps(<span class=\"synConstant\">&quot;あ&quot;</span>)\n<span class=\"synConstant\">'&quot;</span><span class=\"synSpecial\">\\\\</span><span class=\"synConstant\">u3042&quot;'</span>\n&gt;&gt;&gt; json.dumps(<span class=\"synConstant\">&quot;あ&quot;</span>, ensure_ascii=<span class=\"synIdentifier\">False</span>)\n<span class=\"synConstant\">'&quot;あ&quot;'</span>\n</pre>\n\n\n<p>もちろん、<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/unicode\">unicode</a>-escapeでencodeしてあげても作れる。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink>&gt;&gt;&gt; <span class=\"synConstant\">'あ'</span>.encode(<span class=\"synConstant\">&quot;unicode-escape&quot;</span>)\nb<span class=\"synConstant\">'</span><span class=\"synSpecial\">\\\\</span><span class=\"synConstant\">u3042'</span>\n</pre>\n\n\n<h2>htmlなどでの数値<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%CA%B8%BB%FA%BB%B2%BE%C8\">文字参照</a>(xmlcharref)</h2>\n\n<p>こういうやつ。<a href=\"https://ja.wikipedia.org/wiki/%E6%96%87%E5%AD%97%E5%8F%82%E7%85%A7\">wikipedia</a></p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>&#39;&amp;#12354;&#39;</pre>\n\n\n<p>たまに、<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%B9%A5%AF%A5%EC%A5%A4%A5%D4%A5%F3%A5%B0\">スクレイピング</a>していたりすると<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%AF%A5%ED%A1%BC%A5%E9%A1%BC\">クローラー</a>が保存する文字列がこの形になっている場合がある。あるいは何らかの<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/API\">API</a>がこの表現で返ってくるということがある。</p>\n\n<p>これは<a href=\"https://docs.python.org/3/library/html.html#html.escape\">html</a>パッケージのunescapeを使うと良い。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink>&gt;&gt;&gt; <span class=\"synPreProc\">import</span> html\n&gt;&gt;&gt; html.unescape(<span class=\"synConstant\">'&amp;#12354;'</span>)\n<span class=\"synConstant\">'あ'</span>\n</pre>\n\n\n<p>ちなみにencode時のエラーハンドラーを利用してこの表現を作ることができる。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink>&gt;&gt;&gt; <span class=\"synConstant\">'あ'</span>.encode(<span class=\"synConstant\">&quot;ascii&quot;</span>, <span class=\"synConstant\">&quot;xmlcharrefreplace&quot;</span>)\nb<span class=\"synConstant\">'&amp;#12354;'</span>\n\n<span class=\"synComment\"># その他色々な表現も</span>\n&gt;&gt;&gt; <span class=\"synConstant\">&quot;あ&quot;</span>.encode(<span class=\"synConstant\">&quot;ascii&quot;</span>, <span class=\"synConstant\">&quot;backslashreplace&quot;</span>)\nb<span class=\"synConstant\">'</span><span class=\"synSpecial\">\\\\</span><span class=\"synConstant\">u3042'</span>\n&gt;&gt;&gt; <span class=\"synConstant\">&quot;あ&quot;</span>.encode(<span class=\"synConstant\">&quot;ascii&quot;</span>, <span class=\"synConstant\">&quot;namereplace&quot;</span>)\nb<span class=\"synConstant\">'</span><span class=\"synSpecial\">\\\\</span><span class=\"synConstant\">N{HIRAGANA LETTER A}'</span>\n</pre>\n\n\n<p>詳しくはドキュメントの<a href=\"https://docs.python.jp/3/library/codecs.html#error-handlers\">エラーハンドラーの部分</a>を</p>\n\n<h2><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%C4%C9%B5%AD\">追記</a>: URLクォート</h2>\n\n<p>これも一応ここに入れてしまう。こういうやつ。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>&#39;%E3%81%82&#39;</pre>\n\n\n<p>URL上にマルチバイト文字を載せるときこの形式になることが多い。<a href=\"https://docs.python.jp/3/library/urllib.parse.html\">urllib.parse</a>のquoteやunquoteを使う(空白も置き換えたい場合にはplusの方を)。</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink>&gt;&gt;&gt; <span class=\"synPreProc\">import</span> urllib.parse <span class=\"synStatement\">as</span> p\n&gt;&gt;&gt; p.unquote(<span class=\"synConstant\">'%E3%81%82'</span>)\n<span class=\"synConstant\">'あ'</span>\n</pre>\n\n\n<h2>参考</h2>\n\n<ul>\n<li><a href=\"https://ja.wikipedia.org/wiki/%E6%96%87%E5%AD%97%E5%8F%82%E7%85%A7\">https://ja.wikipedia.org/wiki/%E6%96%87%E5%AD%97%E5%8F%82%E7%85%A7</a></li>\n<li><a href=\"https://docs.python.jp/3/howto/unicode.html\">https://docs.python.jp/3/howto/unicode.html</a></li>\n<li><a href=\"https://docs.python.jp/3/library/codecs.html#error-handlers\">https://docs.python.jp/3/library/codecs.html#error-handlers</a></li>\n<li><a href=\"https://docs.python.org/3/library/html.html\">https://docs.python.org/3/library/html.html</a></li>\n<li><a href=\"https://docs.python.jp/3/library/urllib.parse.html\">https://docs.python.jp/3/library/urllib.parse.html</a></li>\n</ul>"
+        },
+        "category": [
+          {
+            "@term": "python"
+          },
+          {
+            "@term": "文字列"
+          },
+          {
+            "@term": "memo"
+          }
+        ],
+        "app:control": {
+          "app:draft": "no"
+        }
+      },
+      {
+        "id": "tag:blog.hatena.ne.jp,2013:blog-podhmo-13208692334729901491-10257846132615830857",
+        "link": [
+          {
+            "@rel": "edit",
+            "@href": "https://blog.hatena.ne.jp/podhmo/pod.hatenablog.com/atom/entry/10257846132615830857"
+          },
+          {
+            "@rel": "alternate",
+            "@type": "text/html",
+            "@href": "https://pod.hatenablog.com/entry/2018/08/30/090432"
+          }
+        ],
+        "author": {
+          "name": "podhmo"
+        },
+        "title": "handofcatsでchoicesをサポートした",
+        "updated": "2018-08-30T09:04:32+09:00",
+        "published": "2018-08-30T09:04:32+09:00",
+        "app:edited": "2018-08-30T09:04:32+09:00",
+        "summary": {
+          "@type": "text",
+          "#text": "github.com handofcatsでchoicesをサポートした。NewTypeで作った型にchoicesというattributeを追加してあげる感じで使う(experimental)。 詳細 以下の様なコードが dump.py import sys import typ…"
+        },
+        "content": {
+          "@type": "text/x-markdown",
+          "#text": "[https://github.com/podhmo/handofcats:embed:cite]\n\nhandofcatsでchoicesをサポートした。NewTypeで作った型にchoicesというattributeを追加してあげる感じで使う(experimental)。\n\n## 詳細\n\n以下の様なコードが\n\ndump.py\n```python\nimport sys\nimport typing as t\nfrom handofcats import as_command\n\n\ndef csv_dump(rows: t.Sequence[dict]) -> None:\n    import csv\n    w = csv.DictWriter(sys.stdout, [\"name\", \"age\"])\n    w.writeheader()\n    w.writerows(rows)\n\n\ndef json_dump(rows: t.Sequence[dict]) -> None:\n    import json\n    json.dump(rows, sys.stdout, indent=2, ensure_ascii=False)\n    sys.stdout.write(\"\\n\")\n\n\nDumpFormat = t.NewType(\"DumpFormat\", str)\nDumpFormat.choices = [\"json\", \"csv\"]  # これが重要\n\n@as_command\ndef run(*, format: DumpFormat = \"json\"):\n    rows = [\n        {\n            \"name\": \"foo\",\n            \"age\": 20,\n        },\n        {\n            \"name\": \"bar\",\n            \"age\": 21,\n        },\n    ]\n    dump = globals()[\"{}_dump\".format(format)]\n    dump(rows)\n```\n\nNewTypeのchoicesがコマンドライン引数のchoicesとして扱われる。\n\n```console\n$ python dump.py -h\nusage: dump.py [-h] [--expose] [--format {json,csv}]\n\noptional arguments:\n  -h, --help           show this help message and exit\n  --expose\n  --format {json,csv}  (default: 'json')\n```\n\n\n`--expose`でその部分のコードが生える。\n\n```console\n$ dump.py --expose > dump-exposed.py\n```\n\n差分。\n\n```diff\n--- dump.py\t2018-08-30 09:00:06.055747417 +0900\n+++ dump-exposed.py\t2018-08-30 08:55:15.765228110 +0900\n@@ -1,6 +1,5 @@\n import sys\n import typing as t\n-from handofcats import as_command\n \n \n def csv_dump(rows: t.Sequence[dict]) -> None:\n@@ -19,7 +18,7 @@\n DumpFormat = t.NewType(\"DumpFormat\", str)\n DumpFormat.choices = [\"json\", \"csv\"]\n \n-@as_command\n+\n def run(*, format: DumpFormat = \"json\"):\n     rows = [\n         {\n@@ -33,3 +32,15 @@\n     ]\n     dump = globals()[\"{}_dump\".format(format)]\n     dump(rows)\n+\n+def main(argv=None):\n+    import argparse\n+    parser = argparse.ArgumentParser(description=None)\n+    parser.print_usage = parser.print_help\n+    parser.add_argument('--format', choices=['json', 'csv'], default='json', help=\"(default: 'json')\", required=False)\n+    args = parser.parse_args(argv)\n+    run(**vars(args))\n+\n+\n+if __name__ == '__main__':\n+    main()\n```"
+        },
+        "hatena:formatted-content": {
+          "@type": "text/html",
+          "@xmlns:hatena": "http://www.hatena.ne.jp/info/xmlns#",
+          "#text": "<p><iframe src=\"https://hatenablog-parts.com/embed?url=https%3A%2F%2Fgithub.com%2Fpodhmo%2Fhandofcats\" title=\"podhmo/handofcats\" class=\"embed-card embed-webcard\" scrolling=\"no\" frameborder=\"0\" style=\"display: block; width: 100%; height: 155px; max-width: 500px; margin: 10px 0px;\"></iframe><cite class=\"hatena-citation\"><a href=\"https://github.com/podhmo/handofcats\">github.com</a></cite></p>\n\n<p>handofcatsでchoicesをサポートした。<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/NewType\">NewType</a>で作った型にchoicesというattributeを追加してあげる感じで使う(experimental)。</p>\n\n<h2>詳細</h2>\n\n<p>以下の様なコードが</p>\n\n<p>dump.py</p>\n\n<pre class=\"code lang-python\" data-lang=\"python\" data-unlink><span class=\"synPreProc\">import</span> sys\n<span class=\"synPreProc\">import</span> typing <span class=\"synStatement\">as</span> t\n<span class=\"synPreProc\">from</span> handofcats <span class=\"synPreProc\">import</span> as_command\n\n\n<span class=\"synStatement\">def</span> <span class=\"synIdentifier\">csv_dump</span>(rows: t.Sequence[<span class=\"synIdentifier\">dict</span>]) -&gt; <span class=\"synIdentifier\">None</span>:\n    <span class=\"synPreProc\">import</span> csv\n    w = csv.DictWriter(sys.stdout, [<span class=\"synConstant\">&quot;name&quot;</span>, <span class=\"synConstant\">&quot;age&quot;</span>])\n    w.writeheader()\n    w.writerows(rows)\n\n\n<span class=\"synStatement\">def</span> <span class=\"synIdentifier\">json_dump</span>(rows: t.Sequence[<span class=\"synIdentifier\">dict</span>]) -&gt; <span class=\"synIdentifier\">None</span>:\n    <span class=\"synPreProc\">import</span> json\n    json.dump(rows, sys.stdout, indent=<span class=\"synConstant\">2</span>, ensure_ascii=<span class=\"synIdentifier\">False</span>)\n    sys.stdout.write(<span class=\"synConstant\">&quot;</span><span class=\"synSpecial\">\\n</span><span class=\"synConstant\">&quot;</span>)\n\n\nDumpFormat = t.NewType(<span class=\"synConstant\">&quot;DumpFormat&quot;</span>, <span class=\"synIdentifier\">str</span>)\nDumpFormat.choices = [<span class=\"synConstant\">&quot;json&quot;</span>, <span class=\"synConstant\">&quot;csv&quot;</span>]  <span class=\"synComment\"># これが重要</span>\n\n<span class=\"synPreProc\">@</span><span class=\"synIdentifier\">as_command</span>\n<span class=\"synStatement\">def</span> <span class=\"synIdentifier\">run</span>(*, <span class=\"synIdentifier\">format</span>: DumpFormat = <span class=\"synConstant\">&quot;json&quot;</span>):\n    rows = [\n        {\n            <span class=\"synConstant\">&quot;name&quot;</span>: <span class=\"synConstant\">&quot;foo&quot;</span>,\n            <span class=\"synConstant\">&quot;age&quot;</span>: <span class=\"synConstant\">20</span>,\n        },\n        {\n            <span class=\"synConstant\">&quot;name&quot;</span>: <span class=\"synConstant\">&quot;bar&quot;</span>,\n            <span class=\"synConstant\">&quot;age&quot;</span>: <span class=\"synConstant\">21</span>,\n        },\n    ]\n    dump = <span class=\"synIdentifier\">globals</span>()[<span class=\"synConstant\">&quot;{}_dump&quot;</span>.<span class=\"synIdentifier\">format</span>(<span class=\"synIdentifier\">format</span>)]\n    dump(rows)\n</pre>\n\n\n<p><a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/NewType\">NewType</a>のchoicesが<a class=\"keyword\" href=\"http://d.hatena.ne.jp/keyword/%A5%B3%A5%DE%A5%F3%A5%C9%A5%E9%A5%A4%A5%F3\">コマンドライン</a>引数のchoicesとして扱われる。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ python dump.py -h\nusage: dump.py [-h] [--expose] [--format {json,csv}]\n\noptional arguments:\n  -h, --help           show this help message and exit\n  --expose\n  --format {json,csv}  (default: &#39;json&#39;)</pre>\n\n\n<p><code>--expose</code>でその部分のコードが生える。</p>\n\n<pre class=\"code\" data-lang=\"\" data-unlink>$ dump.py --expose &gt; dump-exposed.py</pre>\n\n\n<p>差分。</p>\n\n<pre class=\"code lang-diff\" data-lang=\"diff\" data-unlink><span class=\"synType\">--- dump.py  2018-08-30 09:00:06.055747417 +0900</span>\n<span class=\"synType\">+++ dump-exposed.py   2018-08-30 08:55:15.765228110 +0900</span>\n<span class=\"synStatement\">@@ -1,6 +1,5 @@</span>\n import sys\n import typing as t\n<span class=\"synSpecial\">-from handofcats import as_command</span>\n \n \n def csv_dump(rows: t.Sequence[dict]) -&gt; None:\n<span class=\"synStatement\">@@ -19,7 +18,7 @@</span>\n DumpFormat = t.NewType(&quot;DumpFormat&quot;, str)\n DumpFormat.choices = [&quot;json&quot;, &quot;csv&quot;]\n \n<span class=\"synSpecial\">-@as_command</span>\n<span class=\"synIdentifier\">+</span>\n def run(*, format: DumpFormat = &quot;json&quot;):\n     rows = [\n         {\n<span class=\"synStatement\">@@ -33,3 +32,15 @@</span>\n     ]\n     dump = globals()[&quot;{}_dump&quot;.format(format)]\n     dump(rows)\n<span class=\"synIdentifier\">+</span>\n<span class=\"synIdentifier\">+def main(argv=None):</span>\n<span class=\"synIdentifier\">+    import argparse</span>\n<span class=\"synIdentifier\">+    parser = argparse.ArgumentParser(description=None)</span>\n<span class=\"synIdentifier\">+    parser.print_usage = parser.print_help</span>\n<span class=\"synIdentifier\">+    parser.add_argument('--format', choices=['json', 'csv'], default='json', help=&quot;(default: 'json')&quot;, required=False)</span>\n<span class=\"synIdentifier\">+    args = parser.parse_args(argv)</span>\n<span class=\"synIdentifier\">+    run(**vars(args))</span>\n<span class=\"synIdentifier\">+</span>\n<span class=\"synIdentifier\">+</span>\n<span class=\"synIdentifier\">+if __name__ == '__main__':</span>\n<span class=\"synIdentifier\">+    main()</span>\n</pre>"
+        },
+        "category": [
+          {
+            "@term": "python"
+          },
+          {
+            "@term": "handofcats"
+          }
+        ],
+        "app:control": {
+          "app:draft": "no"
+        }
+      }
+    ]
+  }
+}

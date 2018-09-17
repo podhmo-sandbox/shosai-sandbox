@@ -1,0 +1,12 @@
+#[foo][sample]sample (with images)
+
+yay
+
+png
+
+![png](https://image.docbase.io/uploads/5d1f9791-931b-4b18-abaf-d528e4e4c498.png)
+
+
+svg
+
+![svg](https://image.docbase.io/uploads/0b8b788b-cf29-48f8-b198-6cc113ba8c23.svg)

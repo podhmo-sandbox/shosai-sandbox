@@ -1,0 +1,38 @@
+{
+  "entry": {
+    "@xmlns": "http://purl.org/atom/ns#",
+    "@xmlns:hatena": "http://www.hatena.ne.jp/info/xmlns#",
+    "title": "Cancelled_process_mini.png",
+    "link": [
+      {
+        "@rel": "alternate",
+        "@type": "text/html",
+        "@href": "http://f.hatena.ne.jp/podhmo/20180917005749"
+      },
+      {
+        "@rel": "service.edit",
+        "@type": "application/x.atom+xml",
+        "@href": "http://f.hatena.ne.jp/atom/edit/20180917005749",
+        "@title": "Cancelled_process_mini.png"
+      }
+    ],
+    "issued": "2018-09-17T00:57:49+09:00",
+    "author": {
+      "name": "podhmo"
+    },
+    "generator": {
+      "@url": "http://f.hatena.ne.jp/",
+      "@version": "1.0",
+      "#text": "Hatena::Fotolife"
+    },
+    "dc:subject": {
+      "@xmlns:dc": "http://purl.org/dc/elements/1.1/",
+      "#text": "shosai"
+    },
+    "id": "tag:hatena.ne.jp,2005:fotolife-podhmo-20180917005749",
+    "hatena:imageurl": "https://cdn-ak.f.st-hatena.com/images/fotolife/p/podhmo/20180917/20180917005749.png",
+    "hatena:imageurlmedium": "https://cdn-ak.f.st-hatena.com/images/fotolife/p/podhmo/20180917/20180917005749_120.jpg",
+    "hatena:imageurlsmall": "https://cdn-ak.f.st-hatena.com/images/fotolife/p/podhmo/20180917/20180917005749_m.jpg",
+    "hatena:syntax": "f:id:podhmo:20180917005749p:image"
+  }
+}
