@@ -2,6 +2,10 @@ WRAP ?= python -m reqtrace
 
 search:
 	${WRAP} shosai docbase search
+clonehello:
+	${WRAP} shosai docbase clone https://po.docbase.io/posts/528390 --name hello
+pullhello:
+	${WRAP} shosai docbase pull docs/hello.md
 posthello:
 	${WRAP} shosai docbase push hello.md
 postimage:
